@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Міша · 7 клас</title>
+<meta name="description" content="Сайт-репетитор за програмою 7 класу НУШ: алгебра, геометрія, фізика, історія">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cormorant+Garamond:wght@600;700&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Russo+One&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: sticky subject switcher → subject header → year roadmap strip → topic study sheet + homework journal side column.
+   Each subject is its own "world": algebra = squared notebook, geometry = blueprint, physics = lab bench, history = parchment chronicle. */
+:root{
+  --bg:#f3f4f1; --surface:#ffffff; --ink:#1d2430; --muted:#5d6675; --accent:#2f5bd3; --accent2:#e2553d;
+  --line:rgba(29,36,48,.10); --soft:rgba(47,91,211,.08); --ok:#2d8a4e; --warn:#c77a12;
+  --f-display:"Unbounded", "Golos Text", system-ui, sans-serif;
+  --f-body:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-hand:"Caveat", "Comic Sans MS", cursive;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --tex:none; --texsize:auto;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14171c; --surface:#1c2027; --ink:#e7eaf0; --muted:#9aa3b2; --accent:#7c9cff; --accent2:#ff7a63;
+  --line:rgba(231,234,240,.10); --soft:rgba(124,156,255,.12); --ok:#5cc983; --warn:#f0a845; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#14171c; --surface:#1c2027; --ink:#e7eaf0; --muted:#9aa3b2; --accent:#7c9cff; --accent2:#ff7a63;
+  --line:rgba(231,234,240,.10); --soft:rgba(124,156,255,.12); --ok:#5cc983; --warn:#f0a845; color-scheme:dark }
+
+/* ---------- ALGEBRA: squared exercise book, blue ink, red margin ---------- */
+:root[data-s="algebra"]{ --bg:#f7f8f4; --surface:#fdfdfb; --ink:#1b2a4a; --muted:#56627a; --accent:#2148b8; --accent2:#d9483b;
+  --line:rgba(33,72,184,.13); --soft:rgba(33,72,184,.07);
+  --f-display:"Caveat", cursive; --tex:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px); --texsize:22px 22px }
+@media (prefers-color-scheme: dark){ :root[data-s="algebra"]:not([data-theme="light"]){
+  --bg:#121a2b; --surface:#17213a; --ink:#e3e9fa; --muted:#9fabc8; --accent:#8fb0ff; --accent2:#ff7b6b; --line:rgba(143,176,255,.11); --soft:rgba(143,176,255,.10) }}
+:root[data-theme="dark"][data-s="algebra"]{ --bg:#121a2b; --surface:#17213a; --ink:#e3e9fa; --muted:#9fabc8; --accent:#8fb0ff; --accent2:#ff7b6b; --line:rgba(143,176,255,.11); --soft:rgba(143,176,255,.10) }
+
+/* ---------- GEOMETRY: blueprint, drafting mono labels ---------- */
+:root[data-s="geometry"]{ --bg:#e6eef7; --surface:#f4f8fc; --ink:#0f2a4a; --muted:#4a6584; --accent:#0a6fb8; --accent2:#c2410c;
+  --line:rgba(10,111,184,.14); --soft:rgba(10,111,184,.08);
+  --f-display:"Unbounded", sans-serif; --tex:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),linear-gradient(rgba(10,111,184,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(10,111,184,.06) 1px,transparent 1px); --texsize:80px 80px,80px 80px,16px 16px,16px 16px }
+@media (prefers-color-scheme: dark){ :root[data-s="geometry"]:not([data-theme="light"]){
+  --bg:#0d2440; --surface:#123055; --ink:#e4f1ff; --muted:#93b3d6; --accent:#6cc4ff; --accent2:#ffb36b; --line:rgba(108,196,255,.16); --soft:rgba(108,196,255,.10) }}
+:root[data-theme="dark"][data-s="geometry"]{ --bg:#0d2440; --surface:#123055; --ink:#e4f1ff; --muted:#93b3d6; --accent:#6cc4ff; --accent2:#ffb36b; --line:rgba(108,196,255,.16); --soft:rgba(108,196,255,.10) }
+
+/* ---------- PHYSICS: lab bench, amber signal + teal readout ---------- */
+:root[data-s="physics"]{ --bg:#eeede8; --surface:#fbfaf6; --ink:#22231f; --muted:#62645b; --accent:#c25e00; --accent2:#0f8a8a;
+  --line:rgba(34,35,31,.12); --soft:rgba(194,94,0,.08);
+  --f-display:"Russo One", sans-serif; --tex:radial-gradient(var(--line) 1.2px,transparent 1.3px); --texsize:18px 18px }
+@media (prefers-color-scheme: dark){ :root[data-s="physics"]:not([data-theme="light"]){
+  --bg:#17181a; --surface:#202226; --ink:#ecebe6; --muted:#a3a49c; --accent:#ffa040; --accent2:#3fd0cf; --line:rgba(236,235,230,.10); --soft:rgba(255,160,64,.10) }}
+:root[data-theme="dark"][data-s="physics"]{ --bg:#17181a; --surface:#202226; --ink:#ecebe6; --muted:#a3a49c; --accent:#ffa040; --accent2:#3fd0cf; --line:rgba(236,235,230,.10); --soft:rgba(255,160,64,.10) }
+
+/* ---------- HISTORY: parchment chronicle, serif, cinnabar ---------- */
+:root[data-s="history"]{ --bg:#efe6d4; --surface:#f8f2e4; --ink:#2e2216; --muted:#6e5d48; --accent:#9b2b1f; --accent2:#2f5d50;
+  --line:rgba(46,34,22,.14); --soft:rgba(155,43,31,.07);
+  --f-display:"Cormorant Garamond", "PT Serif", Georgia, serif; --f-body:"PT Serif", Georgia, serif;
+  --tex:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.35),transparent 60%),radial-gradient(ellipse at 100% 100%,rgba(120,80,30,.10),transparent 55%); --texsize:auto }
+@media (prefers-color-scheme: dark){ :root[data-s="history"]:not([data-theme="light"]){
+  --bg:#1e1914; --surface:#28211a; --ink:#efe4d0; --muted:#b5a48a; --accent:#e0745f; --accent2:#7fbfa8; --line:rgba(239,228,208,.12); --soft:rgba(224,116,95,.10) }}
+:root[data-theme="dark"][data-s="history"]{ --bg:#1e1914; --surface:#28211a; --ink:#efe4d0; --muted:#b5a48a; --accent:#e0745f; --accent2:#7fbfa8; --line:rgba(239,228,208,.12); --soft:rgba(224,116,95,.10) }
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg); background-image:var(--tex); background-size:var(--texsize); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.6; transition:background-color .3s}
+a{color:var(--accent)}
+button,input,textarea,select{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.top{position:sticky; top:env(safe-area-inset-top,0px); z-index:10; background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:14px}
+.brand{font-family:"Unbounded",sans-serif; font-weight:700; font-size:15px; letter-spacing:-.01em; white-space:nowrap; cursor:pointer; background:none; border:0; padding:0}
+.brand small{font-family:var(--f-mono); font-weight:400; font-size:11px; color:var(--muted); margin-left:6px}
+nav.subj{display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; min-width:0}
+nav.subj::-webkit-scrollbar{display:none}
+nav.subj button{border:1px solid var(--line); background:var(--surface); border-radius:999px; padding:6px 13px; font-size:14px; font-weight:500; cursor:pointer; white-space:nowrap}
+nav.subj button[aria-current="page"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+
+main{max-width:1180px; margin:0 auto; padding-inline:16px; padding-block:22px 60px}
+
+/* ---------- subject header ---------- */
+.shead{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px 24px; margin-bottom:18px}
+.shead h1{font-family:var(--f-display); font-weight:700; font-size:clamp(34px,6vw,56px); line-height:1; margin:0; letter-spacing:-.01em}
+:root[data-s="algebra"] .shead h1{color:var(--accent); font-size:clamp(44px,8vw,72px)}
+:root[data-s="geometry"] .shead h1{text-transform:uppercase; font-size:clamp(28px,5vw,44px); letter-spacing:.04em}
+:root[data-s="physics"] .shead h1{text-transform:uppercase; letter-spacing:.03em}
+:root[data-s="history"] .shead h1{font-style:italic; font-size:clamp(40px,7vw,64px)}
+.shead .sub{font-family:var(--f-mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:8px}
+.curpill{font-size:14px; color:var(--muted)}
+.curpill b{color:var(--ink)}
+
+/* ---------- roadmap ---------- */
+.road{display:flex; gap:8px; overflow-x:auto; padding:4px 2px 12px; margin-bottom:18px; scroll-snap-type:x proximity}
+.road button{flex:0 0 auto; width:178px; text-align:left; scroll-snap-align:start; border:1px solid var(--line); background:var(--surface); border-radius:var(--radius); padding:9px 11px; cursor:pointer; display:flex; flex-direction:column; gap:3px; min-height:92px}
+.road .mo{font-family:var(--f-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); display:flex; justify-content:space-between; gap:6px}
+.road .nm{font-size:13.5px; line-height:1.3; font-weight:500}
+.road button.done .nm{color:var(--muted)}
+.road button.done .st{color:var(--ok)}
+.road button.now{border:2px solid var(--accent); padding:8px 10px}
+.road button.now .st{color:var(--accent); font-weight:600}
+.road button[aria-pressed="true"]{background:var(--soft); box-shadow:0 0 0 3px var(--soft)}
+
+/* ---------- body grid ---------- */
+.grid{display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:22px; align-items:start}
+@media (max-width:900px){ .grid{grid-template-columns:minmax(0,1fr)} }
+
+.sheet{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(18px,3vw,32px); min-width:0; position:relative}
+:root[data-s="algebra"] .sheet{border-radius:4px; box-shadow:0 1px 0 var(--line),0 10px 30px -18px rgba(20,40,90,.25); padding-left:clamp(30px,5vw,58px)}
+:root[data-s="algebra"] .sheet::before{content:""; position:absolute; top:0; bottom:0; left:clamp(18px,3vw,38px); width:2px; background:var(--accent2); opacity:.55}
+:root[data-s="geometry"] .sheet{border-radius:0; border:1.5px solid var(--accent); box-shadow:6px 6px 0 var(--soft)}
+:root[data-s="physics"] .sheet{border-radius:14px; border-top:6px solid var(--accent)}
+:root[data-s="history"] .sheet{border-radius:2px; box-shadow:0 18px 40px -26px rgba(60,30,10,.45); border-color:color-mix(in srgb,var(--accent) 25%,var(--line))}
+
+.t-eyebrow{font-family:var(--f-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center}
+.badge{display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; letter-spacing:.06em; border:1px solid currentColor}
+.badge.now{color:var(--accent)}
+.badge.done{color:var(--ok)}
+.badge.next{color:var(--muted)}
+.sheet h2{font-family:var(--f-display); font-size:clamp(26px,4vw,36px); line-height:1.15; margin:.35em 0 .3em; text-wrap:balance; font-weight:700}
+:root[data-s="algebra"] .sheet h2{font-size:clamp(32px,5vw,44px); color:var(--accent)}
+:root[data-s="geometry"] .sheet h2{font-size:clamp(20px,3vw,27px); text-transform:uppercase; letter-spacing:.02em}
+:root[data-s="physics"] .sheet h2{font-size:clamp(22px,3.4vw,30px)}
+.hook{font-size:17.5px; line-height:1.55; max-width:62ch; margin:0 0 20px; color:var(--ink)}
+:root[data-s="algebra"] .hook{font-family:var(--f-hand); font-size:24px; line-height:1.3; color:var(--accent2)}
+:root[data-s="history"] .hook{font-style:italic}
+.sheet h3{font-family:var(--f-mono); font-size:12.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--accent); margin:30px 0 10px; display:flex; align-items:center; gap:10px}
+.sheet h3::after{content:""; flex:1; height:1px; background:var(--line)}
+.theory{max-width:68ch}
+.theory p{margin:.5em 0}
+.theory ul{padding-left:1.2em; margin:.4em 0}
+.theory li{margin:.3em 0}
+.rule{border:1px solid var(--line); background:var(--soft); border-radius:8px; padding:12px 14px; margin:12px 0}
+.rule b:first-child{display:block; font-family:var(--f-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin-bottom:4px}
+.formulas{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:10px; margin:12px 0}
+.formulas div{border:1px dashed color-mix(in srgb,var(--accent) 45%,transparent); border-radius:8px; padding:10px 12px}
+.formulas .f{font-family:var(--f-mono); font-size:17px; font-weight:600; color:var(--accent)}
+.formulas .w{font-size:13.5px; color:var(--muted); margin-top:3px}
+.m{font-family:var(--f-mono); font-size:.95em; white-space:nowrap}
+.warn{border-left:3px solid var(--accent2); padding:6px 0 6px 12px; margin:12px 0; color:var(--ink)}
+.warn b{color:var(--accent2)}
+
+.visual{margin:14px 0; border:1px solid var(--line); border-radius:8px; padding:14px; background:var(--bg); overflow-x:auto}
+.visual svg{display:block; max-width:100%; height:auto; margin:0 auto}
+.visual .cap{font-size:13.5px; color:var(--muted); margin-top:8px; text-align:center}
+svg text{font-family:var(--f-mono); fill:var(--ink)}
+svg .s{stroke:var(--ink); fill:none; stroke-width:2}
+svg .s1{stroke:var(--ink); fill:none; stroke-width:1}
+svg .sa{stroke:var(--accent); fill:none; stroke-width:2.5}
+svg .sb{stroke:var(--accent2); fill:none; stroke-width:2.5}
+svg .fa{fill:var(--accent)}
+svg .fb{fill:var(--accent2)}
+svg .fs{fill:var(--soft)}
+svg .fsurf{fill:var(--surface)}
+svg .fi{fill:var(--ink)}
+svg .fm{fill:var(--muted)}
+svg .dash{stroke-dasharray:5 5}
+
+.ex{border:1px solid var(--line); border-radius:8px; margin:10px 0; overflow:hidden; background:var(--surface)}
+.ex .q{padding:12px 14px; display:flex; gap:12px; align-items:baseline}
+.ex .n{font-family:var(--f-mono); font-size:12px; color:var(--accent); font-weight:600; flex:0 0 auto}
+.ex details{border-top:1px solid var(--line)}
+.ex summary{cursor:pointer; padding:9px 14px; font-size:14px; font-weight:600; color:var(--accent); list-style:none; display:flex; align-items:center; gap:8px}
+.ex summary::-webkit-details-marker{display:none}
+.ex summary::before{content:"▸"; transition:transform .15s}
+.ex details[open] summary::before{transform:rotate(90deg)}
+.steps{margin:0; padding:2px 14px 14px 14px; list-style:none; counter-reset:st; display:flex; flex-direction:column; gap:8px}
+.steps li{counter-increment:st; display:grid; grid-template-columns:24px minmax(0,1fr); gap:10px}
+.steps li::before{content:counter(st); font-family:var(--f-mono); font-size:11px; width:22px; height:22px; border-radius:50%; background:var(--soft); color:var(--accent); display:grid; place-items:center; font-weight:600}
+.steps .why{display:block; font-size:13.5px; color:var(--muted)}
+.ans{margin:0 14px 14px; padding:8px 12px; border-radius:6px; background:var(--soft); font-weight:600}
+.ans::before{content:"Відповідь: "; font-family:var(--f-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--accent)}
+
+.quiz{display:flex; flex-direction:column; gap:8px}
+.quiz .qq{border:1px solid var(--line); border-radius:8px; padding:10px 12px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 14px; align-items:center}
+.quiz .qq button{border:1px solid var(--accent); color:var(--accent); background:none; border-radius:999px; padding:3px 12px; font-size:13px; cursor:pointer}
+.quiz .qa{flex-basis:100%; color:var(--ok); font-weight:600}
+.fact{margin-top:22px; padding:14px 16px; border-radius:8px; background:color-mix(in srgb,var(--accent2) 10%,transparent); border:1px solid color-mix(in srgb,var(--accent2) 30%,transparent)}
+.fact b{font-family:var(--f-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--accent2); display:block; margin-bottom:3px}
+.setcur{margin-top:22px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; font-size:13.5px; color:var(--muted)}
+.btn{border:1px solid var(--accent); background:var(--accent); color:var(--surface); border-radius:8px; padding:7px 14px; font-weight:600; cursor:pointer; font-size:14px}
+.btn.ghost{background:none; color:var(--accent)}
+.btn.small{padding:4px 10px; font-size:13px}
+
+/* widgets */
+.ctrl{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; margin-bottom:10px; font-size:14px}
+.ctrl input[type=range]{width:min(260px,100%); accent-color:var(--accent)}
+.seg{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden}
+.seg button{border:0; background:none; padding:4px 12px; cursor:pointer; font-family:var(--f-mono)}
+.seg button[aria-pressed="true"]{background:var(--accent); color:var(--surface)}
+.readout{font-family:var(--f-mono); font-size:18px; font-weight:600; margin:6px 0 10px; overflow-wrap:anywhere}
+.readout .big{color:var(--accent)}
+.cells{display:flex; flex-wrap:wrap; gap:2px; max-height:240px; overflow:auto}
+.cells i{display:block; width:12px; height:12px; border-radius:2px; background:var(--accent); opacity:.85}
+.cells i.n{background:var(--accent2)}
+canvas{display:block; width:100%; border-radius:6px}
+
+/* homework */
+.hw{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:16px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 66px)}
+@media (max-width:900px){ .hw{position:static} }
+.hw h4{margin:0 0 10px; font-family:var(--f-display); font-size:22px; font-weight:700; display:flex; justify-content:space-between; align-items:baseline}
+:root[data-s="geometry"] .hw h4,:root[data-s="physics"] .hw h4{font-size:16px; text-transform:uppercase; letter-spacing:.04em}
+:root[data-s="algebra"] .hw h4{font-size:30px}
+.hw h4 small{font-family:var(--f-mono); font-size:11px; font-weight:400; color:var(--muted); text-transform:none; letter-spacing:0}
+.hwf{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px}
+.hwf label{font-size:11.5px; font-family:var(--f-mono); color:var(--muted); text-transform:uppercase; letter-spacing:.05em; display:flex; flex-direction:column; gap:3px}
+.hwf input,.hwf textarea,.hwf select{border:1px solid var(--line); background:var(--bg); border-radius:6px; padding:7px 8px; font-size:14px; text-transform:none; letter-spacing:0; font-family:var(--f-body); color:var(--ink); width:100%; min-width:0}
+.hwf .full{grid-column:1/-1}
+.hwf textarea{min-height:64px; resize:vertical}
+.hwlist{display:flex; flex-direction:column; gap:8px}
+.hwi{border:1px solid var(--line); border-radius:8px; padding:9px 10px; display:grid; grid-template-columns:22px minmax(0,1fr) auto; gap:4px 10px; align-items:start}
+.hwi input[type=checkbox]{width:18px; height:18px; margin-top:2px; accent-color:var(--ok)}
+.hwi .meta{font-family:var(--f-mono); font-size:11.5px; color:var(--muted); display:flex; flex-wrap:wrap; gap:4px 10px}
+.hwi .meta .due{color:var(--accent2); font-weight:600}
+.hwi .meta .due.ok{color:var(--muted); font-weight:400}
+.hwi .txt{font-size:14.5px; white-space:pre-wrap; overflow-wrap:anywhere}
+.hwi .tp{font-size:12px; color:var(--accent)}
+.hwi.done .txt{text-decoration:line-through; color:var(--muted)}
+.hwi .del{border:0; background:none; color:var(--muted); cursor:pointer; font-size:12px; padding:2px 4px}
+.hwi .del.arm{color:var(--accent2); font-weight:600}
+.empty{font-size:14px; color:var(--muted); border:1px dashed var(--line); border-radius:8px; padding:12px}
+
+/* home */
+.hero{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:28px; align-items:end; margin:10px 0 26px}
+@media (max-width:800px){ .hero{grid-template-columns:1fr} }
+.hero h1{font-family:"Unbounded",sans-serif; font-size:clamp(30px,5.5vw,54px); line-height:1.05; margin:0; letter-spacing:-.02em; text-wrap:balance}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero p{margin:10px 0 0; color:var(--muted); max-width:56ch}
+.today{font-family:var(--f-mono); font-size:13px; color:var(--muted); border-left:2px solid var(--accent2); padding-left:12px}
+.today b{display:block; font-size:22px; color:var(--ink); font-family:"Unbounded",sans-serif; font-weight:500}
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px}
+.card{border-radius:12px; padding:18px; cursor:pointer; text-align:left; border:1px solid; display:flex; flex-direction:column; gap:8px; min-height:220px; position:relative; overflow:hidden}
+.card .k{font-family:var(--f-mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; opacity:.75}
+.card .nm{font-size:34px; line-height:1; font-weight:700}
+.card .cur{font-size:15px; line-height:1.35; margin-top:auto}
+.card .cur small{display:block; font-family:var(--f-mono); font-size:11px; opacity:.7; text-transform:uppercase; letter-spacing:.06em; margin-bottom:2px}
+.card .prog{height:4px; border-radius:2px; background:color-mix(in srgb,currentColor 18%,transparent); position:relative}
+.card .prog span{position:absolute; inset:0 auto 0 0; border-radius:2px; background:currentColor; opacity:1}
+.card .hwc{font-family:var(--f-mono); font-size:12px}
+/* each card previews its subject's world, fixed palettes that read on any host theme */
+.c-algebra{background:#fdfdfb; color:#1b2a4a; border-color:#c9d3ea; background-image:linear-gradient(rgba(33,72,184,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(33,72,184,.12) 1px,transparent 1px); background-size:20px 20px}
+.c-algebra .nm{font-family:"Caveat",cursive; font-size:46px; color:#2148b8}
+.c-geometry{background:#0d2440; color:#e4f1ff; border-color:#1d4a7a; background-image:linear-gradient(rgba(108,196,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(108,196,255,.14) 1px,transparent 1px); background-size:24px 24px}
+.c-geometry .nm{font-family:"Unbounded",sans-serif; font-size:24px; text-transform:uppercase; letter-spacing:.04em; color:#6cc4ff}
+.c-physics{background:#202226; color:#ecebe6; border-color:#3a3c41; background-image:radial-gradient(rgba(236,235,230,.12) 1.2px,transparent 1.3px); background-size:16px 16px}
+.c-physics .nm{font-family:"Russo One",sans-serif; font-size:30px; text-transform:uppercase; color:#ffa040}
+.c-history{background:#f3ead7; color:#2e2216; border-color:#d9c6a2}
+.c-history .nm{font-family:"Cormorant Garamond",serif; font-style:italic; font-size:44px; color:#9b2b1f}
+.card:hover{transform:translateY(-2px)}
+.card{transition:transform .15s}
+.home2{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:22px; margin-top:28px; align-items:start}
+@media (max-width:860px){ .home2{grid-template-columns:1fr} }
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:18px}
+.panel h3{font-family:"Unbounded",sans-serif; font-size:16px; margin:0 0 12px; font-weight:500}
+.up{display:flex; flex-direction:column; gap:8px}
+.upi{display:grid; grid-template-columns:86px minmax(0,1fr); gap:10px; padding:8px 0; border-bottom:1px solid var(--line); cursor:pointer}
+.upi:last-child{border-bottom:0}
+.upi .d{font-family:var(--f-mono); font-size:12px; color:var(--accent2); font-weight:600}
+.upi .d small{display:block; color:var(--muted); font-weight:400}
+.upi .s{font-family:var(--f-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--accent)}
+.how{font-size:14.5px; color:var(--muted)}
+.how p{margin:.4em 0}
+.backup{margin-top:12px; display:flex; flex-direction:column; gap:8px}
+.backup textarea{width:100%; min-height:70px; border:1px solid var(--line); background:var(--bg); border-radius:6px; padding:8px; font-family:var(--f-mono); font-size:12px}
+.backup .row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.note{font-size:13px; color:var(--muted)}
+.disc{font-size:13px; color:var(--muted); margin-top:26px; max-width:80ch}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+
+<header class="top"><div class="top-in">
+  <button class="brand" id="brand" type="button">Міша<small>7 клас</small></button>
+  <nav class="subj" id="nav" aria-label="Предмети"></nav>
+</div></header>
+<main id="main"></main>
+
+<script>
+/* =========================================================
+   ДАНІ. Порядок тем — за типовою програмою 7 класу НУШ.
+   У різних підручниках порядок може трохи відрізнятися:
+   поточну тему можна змінити кнопкою «Зробити поточною».
+   ========================================================= */
+const S = {};
+const sup = n => `<sup>${n}</sup>`;
+
+/* ---------------- АЛГЕБРА ---------------- */
+S.algebra = {
+  name:"Алгебра", short:"Алгебра", sub:"Вирази · рівняння · функції", cur:2,
+  topics:[
+  {id:"a1", m:"Вересень", t:"Лінійне рівняння з однією змінною",
+   hook:"Рівняння — це ваги в рівновазі. Що робиш з однією чашею, те мусиш зробити й з іншою.",
+   theory:`<p><b>Лінійне рівняння</b> має вигляд <span class="m">ax = b</span>, де <i>x</i> — змінна, <i>a</i> і <i>b</i> — числа. <b>Корінь</b> — число, яке перетворює рівняння на правильну рівність.</p>
+   <div class="rule"><b>Скільки коренів?</b>
+   <span class="m">a ≠ 0</span> → один корінь <span class="m">x = b : a</span><br>
+   <span class="m">a = 0, b ≠ 0</span> → коренів немає (<span class="m">0·x = 5</span>)<br>
+   <span class="m">a = 0, b = 0</span> → коренем є будь-яке число</div>
+   <p><b>Алгоритм:</b></p>
+   <ul><li>розкрити дужки;</li><li>доданки зі змінною — вліво, числа — вправо, <b>змінюючи знак</b> при перенесенні;</li><li>звести подібні;</li><li>поділити обидві частини на коефіцієнт при <i>x</i>;</li><li>зробити перевірку.</li></ul>`,
+   visual:"balance",
+   ex:[
+    {q:"Розв'яжіть: <span class='m'>3x + 2 = 11</span>", s:[
+      ["<span class='m'>3x = 11 − 2</span>","Переносимо 2 вправо — знак «+» стає «−». На вагах це те саме, що зняти з обох чаш по 2 гирі."],
+      ["<span class='m'>3x = 9</span>",""],
+      ["<span class='m'>x = 9 : 3 = 3</span>","Ділимо обидві частини на 3."],
+      ["Перевірка: <span class='m'>3·3 + 2 = 11</span> ✓",""]], a:"x = 3"},
+    {q:"Розв'яжіть: <span class='m'>5(x − 2) = 2x + 8</span>", s:[
+      ["<span class='m'>5x − 10 = 2x + 8</span>","Розкриваємо дужки: множимо 5 на кожен доданок."],
+      ["<span class='m'>5x − 2x = 8 + 10</span>","2x переносимо вліво (стає −2x), −10 вправо (стає +10)."],
+      ["<span class='m'>3x = 18 → x = 6</span>",""]], a:"x = 6"},
+    {q:"Самокат і шолом разом коштують 120 €. Самокат на 80 € дорожчий за шолом. Скільки коштує кожна річ?", s:[
+      ["Нехай шолом коштує <span class='m'>x</span> €, тоді самокат — <span class='m'>x + 80</span> €.","Позначаємо змінною меншу величину — так рівняння простіше."],
+      ["<span class='m'>x + (x + 80) = 120</span>","Сума цін — 120."],
+      ["<span class='m'>2x = 40 → x = 20</span>",""],
+      ["Самокат: <span class='m'>20 + 80 = 100</span> €",""]], a:"шолом 20 €, самокат 100 €"},
+    {q:"Розв'яжіть: <span class='m'>2(x + 3) = 2x + 5</span>", s:[
+      ["<span class='m'>2x + 6 = 2x + 5</span>",""],
+      ["<span class='m'>2x − 2x = 5 − 6 → 0·x = −1</span>","Змінна зникла, а рівність 0 = −1 неможлива."]], a:"коренів немає"}],
+   quiz:[["Розв'яжіть <span class='m'>x : 4 = 3</span>","x = 12"],["Скільки коренів має <span class='m'>0·x = 0</span>?","безліч — підходить будь-яке число"],["Чи є число −2 коренем рівняння <span class='m'>3x + 7 = 1</span>?","так: 3·(−2) + 7 = 1"]],
+   fact:"Слово «рівняння» в математиці закріпилося завдяки підручникам XVIII ст., а сам запис із буквою x придумав француз Рене Декарт у 1637 році."},
+
+  {id:"a2", m:"Вересень–жовтень", t:"Вирази зі змінними. Тотожні перетворення",
+   hook:"Вираз — це «рецепт» обчислення. Тотожні перетворення роблять рецепт коротшим, не змінюючи страви.",
+   theory:`<p><b>Числовий вираз</b> складається з чисел і знаків дій: <span class="m">3·5 − 2</span>. <b>Вираз зі змінними</b> містить букви: <span class="m">2a + b</span>. Підставивши числа замість букв, отримуємо <b>значення виразу</b>.</p>
+   <p><b>Тотожно рівні вирази</b> мають однакові значення при будь-яких значеннях змінних: <span class="m">2(a + 3)</span> і <span class="m">2a + 6</span>. Рівність таких виразів — <b>тотожність</b>.</p>
+   <div class="rule"><b>Головні прийоми</b>розкриття дужок · зведення подібних доданків (<span class="m">5a − a + 2a = 6a</span>) · мінус перед дужками змінює знаки всередині</div>`,
+   ex:[
+    {q:"Спростіть <span class='m'>3(2a − 1) − (a − 4)</span> і знайдіть значення при <span class='m'>a = 2</span>", s:[
+      ["<span class='m'>6a − 3 − a + 4</span>","Перед другими дужками мінус — знаки всередині змінюються: −a, +4."],
+      ["<span class='m'>5a + 1</span>","Подібні: 6a − a = 5a; −3 + 4 = 1."],
+      ["<span class='m'>5·2 + 1 = 11</span>","Підставляти краще у спрощений вираз — менше обчислень."]], a:"5a + 1; при a = 2 значення 11"}],
+   quiz:[["Чи тотожні вирази <span class='m'>a − (b − c)</span> і <span class='m'>a − b + c</span>?","так"]],
+   fact:""},
+
+  {id:"a3", m:"Жовтень", t:"Степінь з натуральним показником",
+   hook:"Складіть аркуш паперу навпіл 42 рази — і товщина стосу сягне Місяця. Так працює степінь: те саме число множиться саме на себе знову і знову.",
+   theory:`<div class="rule"><b>Означення</b><span class="m">a${sup("n")} = a · a · … · a</span> (n множників). <i>a</i> — <b>основа</b>, <i>n</i> — <b>показник</b>. Окремо: <span class="m">a${sup(1)} = a</span>.</div>
+   <p>Читаємо: <span class="m">5${sup(3)}</span> — «п'ять у кубі», <span class="m">5${sup(2)}</span> — «п'ять у квадраті», <span class="m">5${sup(4)}</span> — «п'ять у четвертому степені».</p>
+   <p><b>Знак степеня.</b> Від'ємне число в <b>парному</b> степені дає додатне число, у <b>непарному</b> — від'ємне: <span class="m">(−2)${sup(4)} = 16</span>, <span class="m">(−2)${sup(3)} = −8</span>. Кожна пара мінусів «з'їдає» одна одну.</p>
+   <div class="warn"><b>Пастка:</b> <span class="m">−2${sup(4)} = −16</span>, а <span class="m">(−2)${sup(4)} = 16</span>. Без дужок у степінь підноситься лише 2, а мінус стоїть окремо.</div>
+   <p><b>Властивості</b> — їх не треба зубрити: досить порахувати множники.</p>
+   <div class="formulas">
+    <div><div class="f">a${sup("m")}·a${sup("n")} = a${sup("m+n")}</div><div class="w">a³·a² = (aaa)(aa) = a⁵ — множники додаються</div></div>
+    <div><div class="f">a${sup("m")} : a${sup("n")} = a${sup("m−n")}</div><div class="w">a⁵ : a² = a³ — два множники скоротились</div></div>
+    <div><div class="f">(a${sup("m")})${sup("n")} = a${sup("mn")}</div><div class="w">(a²)³ = a²·a²·a² = a⁶</div></div>
+    <div><div class="f">(ab)${sup("n")} = a${sup("n")}b${sup("n")}</div><div class="w">(2x)³ = 8x³ — у степінь іде кожен множник</div></div>
+   </div>
+   <p><b>Порядок дій:</b> спершу степінь, потім множення/ділення, потім додавання/віднімання.</p>`,
+   visual:"power",
+   ex:[
+    {q:"Обчисліть <span class='m'>(−3)⁴</span> і <span class='m'>−3⁴</span>", s:[
+      ["<span class='m'>(−3)⁴ = (−3)(−3)(−3)(−3) = 81</span>","Чотири мінуси — дві пари, результат додатний."],
+      ["<span class='m'>−3⁴ = −(3·3·3·3) = −81</span>","Тут у степінь підноситься лише 3, мінус ставимо в кінці."]], a:"81 і −81"},
+    {q:"Спростіть <span class='m'>x⁵ · x³ · x</span>", s:[
+      ["<span class='m'>x = x¹</span>","Змінна без показника має показник 1 — найчастіша помилка, коли його «гублять»."],
+      ["<span class='m'>x⁵⁺³⁺¹ = x⁹</span>","Основи однакові — показники додаємо."]], a:"x⁹"},
+    {q:"Спростіть <span class='m'>(a³)⁴ : a⁷</span>", s:[
+      ["<span class='m'>(a³)⁴ = a¹²</span>","Степінь степеня — показники множимо: 3·4."],
+      ["<span class='m'>a¹² : a⁷ = a⁵</span>","При діленні показники віднімаємо."]], a:"a⁵"},
+    {q:"Обчисліть зручним способом <span class='m'>2⁵ · 5⁵</span>", s:[
+      ["<span class='m'>2⁵ · 5⁵ = (2·5)⁵</span>","Однакові показники — можна об'єднати основи (властивість (ab)ⁿ навпаки)."],
+      ["<span class='m'>10⁵ = 100 000</span>","Без жодного довгого множення."]], a:"100 000"},
+    {q:"Обчисліть <span class='m'>3¹⁰ : 3⁸ − 2³ · 2</span>", s:[
+      ["<span class='m'>3¹⁰ : 3⁸ = 3² = 9</span>",""],
+      ["<span class='m'>2³ · 2 = 2⁴ = 16</span>",""],
+      ["<span class='m'>9 − 16 = −7</span>",""]], a:"−7"}],
+   quiz:[["Що більше: <span class='m'>2¹⁰</span> чи <span class='m'>10³</span>?","2¹⁰ = 1024 > 1000"],["Чому дорівнює <span class='m'>(−1)²⁰²⁶</span>?","1 — показник парний"],["Яка остання цифра числа <span class='m'>2¹⁰⁰</span>?","6: останні цифри степенів двійки повторюються 2, 4, 8, 6, а 100 ділиться на 4"]],
+   fact:"Легенда про шахи: винахідник попросив 1 зерно на першу клітинку, 2 — на другу, 4 — на третю… Разом 2⁶⁴ − 1 ≈ 18 трильйонів трильйонів зерен. Стільки пшениці людство не виростило за всю історію."},
+
+  {id:"a4", m:"Листопад", t:"Одночлени",
+   hook:"Одночлен — цеглинка, з якої складаються всі наступні теми: многочлени, формули, розклад на множники.",
+   theory:`<p><b>Одночлен</b> — добуток чисел, змінних та їхніх степенів: <span class="m">3a²b</span>, <span class="m">−x</span>, <span class="m">7</span>, <span class="m">½mn</span>. А от <span class="m">a + b</span> — вже не одночлен.</p>
+   <div class="rule"><b>Стандартний вигляд</b>одне число на першому місці (<b>коефіцієнт</b>), далі кожна змінна по одному разу: <span class="m">2a·3b·a → 6a²b</span></div>
+   <p><b>Степінь одночлена</b> — сума показників усіх змінних: <span class="m">6a²b</span> має степінь 2 + 1 = 3.</p>
+   <p><b>Подібні одночлени</b> мають однакову буквену частину: <span class="m">5x²y</span> і <span class="m">−x²y</span>. Тільки їх можна додавати.</p>
+   <p><b>Множення:</b> коефіцієнти перемножуємо, показники однакових змінних додаємо. <b>Піднесення до степеня:</b> у степінь іде і коефіцієнт, і кожна змінна.</p>`,
+   visual:"area",
+   ex:[
+    {q:"Зведіть до стандартного вигляду <span class='m'>2a · (−3)b · a³</span>", s:[
+      ["Коефіцієнт: <span class='m'>2 · (−3) = −6</span>","Спочатку збираємо всі числа."],
+      ["<span class='m'>a · a³ = a⁴</span>, b лишається",""],
+      ["<span class='m'>−6a⁴b</span>, степінь 4 + 1 = 5",""]], a:"−6a⁴b"},
+    {q:"Піднесіть до степеня <span class='m'>(−2x²y)³</span>", s:[
+      ["<span class='m'>(−2)³ = −8</span>","Непарний степінь — мінус лишається."],
+      ["<span class='m'>(x²)³ = x⁶, y³</span>",""]], a:"−8x⁶y³"},
+    {q:"Помножте <span class='m'>0,5a²b · (−4ab³)</span>", s:[
+      ["<span class='m'>0,5 · (−4) = −2</span>",""],
+      ["<span class='m'>a²·a = a³, b·b³ = b⁴</span>",""]], a:"−2a³b⁴"},
+    {q:"Знайдіть значення <span class='m'>4x²y</span>, якщо <span class='m'>x = −½, y = 3</span>", s:[
+      ["<span class='m'>x² = (−½)² = ¼</span>","Квадрат від'ємного числа додатний."],
+      ["<span class='m'>4 · ¼ · 3 = 3</span>",""]], a:"3"}],
+   quiz:[["Чи подібні <span class='m'>3x²y</span> і <span class='m'>−x²y</span>?","так, буквена частина однакова"],["Степінь одночлена <span class='m'>−7a³b²c</span>?","6"],["Коефіцієнт одночлена <span class='m'>−x</span>?","−1"]],
+   fact:"Слово «коефіцієнт» походить від латинського coefficiens — «той, що сприяє»."},
+
+  {id:"a5", m:"Листопад–грудень", t:"Многочлени. Дії з многочленами",
+   hook:"Многочлен — сума одночленів. Множити многочлени — як рахувати площу прямокутника, розрізаного на частини.",
+   theory:`<p><b>Многочлен</b> — сума одночленів: <span class="m">2x² − 5x + 3</span>. Щоб помножити многочлен на многочлен, кожен доданок першого множимо на кожен доданок другого.</p>`,
+   ex:[{q:"Помножте <span class='m'>(2x + 1)(x − 3)</span>", s:[["<span class='m'>2x·x + 2x·(−3) + 1·x + 1·(−3)</span>","«Кожен на кожен» — 4 добутки."],["<span class='m'>2x² − 6x + x − 3 = 2x² − 5x − 3</span>",""]], a:"2x² − 5x − 3"}], quiz:[], fact:""},
+  {id:"a6", m:"Січень–лютий", t:"Формули скороченого множення",
+   hook:"Формули, які дозволяють рахувати в голові: 51² = 2601 за дві секунди.",
+   theory:`<div class="formulas"><div><div class="f">(a + b)² = a² + 2ab + b²</div><div class="w">квадрат суми</div></div><div><div class="f">(a − b)² = a² − 2ab + b²</div><div class="w">квадрат різниці</div></div><div><div class="f">(a − b)(a + b) = a² − b²</div><div class="w">різниця квадратів</div></div></div>`,
+   visual:"square",
+   ex:[{q:"Обчисліть усно <span class='m'>51²</span>", s:[["<span class='m'>(50 + 1)² = 50² + 2·50·1 + 1²</span>",""],["<span class='m'>2500 + 100 + 1 = 2601</span>",""]], a:"2601"}], quiz:[], fact:""},
+  {id:"a7", m:"Лютий", t:"Розклад многочленів на множники",
+   hook:"Зворотна дія до множення: розібрати вираз на «деталі». Потрібно для скорочення дробів і розв'язування рівнянь.",
+   theory:`<p>Способи: винесення спільного множника, групування, формули скороченого множення.</p>`,
+   ex:[{q:"Розкладіть <span class='m'>6x² − 9x</span> і <span class='m'>49 − x²</span>", s:[["<span class='m'>6x² − 9x = 3x(2x − 3)</span>","Спільний множник 3x."],["<span class='m'>49 − x² = (7 − x)(7 + x)</span>","Різниця квадратів."]], a:"3x(2x − 3); (7 − x)(7 + x)"}], quiz:[], fact:""},
+  {id:"a8", m:"Березень", t:"Функції. Лінійна функція та її графік",
+   hook:"Функція — правило: подав x, отримав y. Їзда з постійною швидкістю — готова лінійна функція.",
+   theory:`<p>Лінійна функція <span class="m">y = kx + b</span>, її графік — пряма. <i>k</i> показує, як круто пряма йде вгору або вниз.</p>`,
+   ex:[{q:"Самокатер їде зі швидкістю 4 м/с. Запишіть формулу шляху і знайдіть шлях за 15 с.", s:[["<span class='m'>s = 4t</span>","Лінійна функція з k = 4, b = 0."],["<span class='m'>s = 4·15 = 60</span> м",""]], a:"s = 4t; 60 м"}], quiz:[], fact:""},
+  {id:"a9", m:"Квітень–травень", t:"Системи лінійних рівнянь із двома змінними",
+   hook:"Два невідомих — два рівняння. Графічно розв'язок — точка, де перетинаються дві прямі.",
+   theory:`<p>Способи: підстановки, додавання, графічний.</p>`,
+   ex:[{q:"Розв'яжіть систему <span class='m'>x + y = 10, x − y = 4</span>", s:[["Додаємо рівняння: <span class='m'>2x = 14 → x = 7</span>","y скоротилися."],["<span class='m'>y = 10 − 7 = 3</span>",""]], a:"(7; 3)"}], quiz:[], fact:""}
+  ]};
+
+/* ---------------- ГЕОМЕТРІЯ ---------------- */
+S.geometry = {
+  name:"Геометрія", short:"Геометрія", sub:"Креслення · доведення · вимірювання", cur:2,
+  topics:[
+  {id:"g1", m:"Вересень", t:"Точка, пряма, відрізок, промінь",
+   hook:"Усе в геометрії будується з кількох найпростіших фігур. Їх не означують — їх уявляють.",
+   theory:`<p>Через дві точки проходить <b>одна й лише одна</b> пряма. Пряма нескінченна в обидва боки, промінь — в один, відрізок має два кінці.</p>
+   <div class="rule"><b>Основна властивість довжини</b>якщо точка B лежить між A і C, то <span class="m">AB + BC = AC</span></div>`,
+   ex:[{q:"Точка B лежить на відрізку AC = 12 см. AB на 4 см довший за BC. Знайдіть AB і BC.", s:[["Нехай <span class='m'>BC = x</span>, тоді <span class='m'>AB = x + 4</span>",""],["<span class='m'>x + x + 4 = 12 → x = 4</span>","Використали AB + BC = AC."]], a:"AB = 8 см, BC = 4 см"}], quiz:[], fact:""},
+
+  {id:"g2", m:"Вересень–жовтень", t:"Кут. Вимірювання кутів. Бісектриса",
+   hook:"Транспортир — найпростіший прилад, але половина помилок на контрольних — через неправильну шкалу.",
+   theory:`<p><b>Кут</b> — фігура з двох променів зі спільним початком (<b>вершиною</b>). Позначення: <span class="m">∠AOB</span>, вершина завжди в середині.</p>
+   <div class="formulas">
+    <div><div class="f">&lt; 90°</div><div class="w">гострий</div></div>
+    <div><div class="f">= 90°</div><div class="w">прямий</div></div>
+    <div><div class="f">90°…180°</div><div class="w">тупий</div></div>
+    <div><div class="f">= 180°</div><div class="w">розгорнутий — сторони утворюють пряму</div></div>
+   </div>
+   <p><b>Як міряти:</b> центр транспортира — у вершину, нульова позначка — на одну сторону. Рахуємо по тій шкалі, яка від цієї сторони починається з <b>нуля</b>.</p>
+   <p>Якщо промінь ділить кут на два, кут дорівнює сумі частин. <b>Бісектриса</b> ділить кут навпіл.</p>`,
+   visual:"protractor",
+   ex:[
+    {q:"Промінь OC проходить між сторонами кута AOB = 120°. ∠AOC удвічі більший за ∠COB. Знайдіть ці кути.", s:[
+      ["Нехай <span class='m'>∠COB = x</span>, тоді <span class='m'>∠AOC = 2x</span>",""],
+      ["<span class='m'>2x + x = 120° → x = 40°</span>","Кут дорівнює сумі частин, на які його ділить промінь."]], a:"∠AOC = 80°, ∠COB = 40°"},
+    {q:"Бісектриса ділить кут на два кути по 64°. Який це кут?", s:[["<span class='m'>64° · 2 = 128°</span>","Бісектриса ділить навпіл."]], a:"128°, тупий"}],
+   quiz:[["Який кут утворюють стрілки годинника о 3:00?","90°, прямий"],["А о 4:00?","120°: між сусідніми цифрами 360° : 12 = 30°"]],
+   fact:""},
+
+  {id:"g3", m:"Жовтень", t:"Суміжні та вертикальні кути",
+   hook:"Дві прямі перетнулись — і одразу з'явилось чотири кути. Знаєш один — знаєш усі чотири.",
+   theory:`<p><b>Суміжні кути</b> мають одну спільну сторону, а дві інші утворюють пряму (доповняльні промені).</p>
+   <div class="rule"><b>Теорема</b>Сума суміжних кутів дорівнює <span class="m">180°</span>.</div>
+   <p><b>Вертикальні кути</b> — сторони одного є продовженнями сторін іншого. Вони «дивляться» один на одного через точку перетину.</p>
+   <div class="rule"><b>Теорема</b>Вертикальні кути рівні.</div>
+   <p><b>Чому так?</b> ∠1 і ∠2 — суміжні, тож <span class="m">∠1 + ∠2 = 180°</span>. ∠3 і ∠2 — теж суміжні: <span class="m">∠3 + ∠2 = 180°</span>. Віднявши, отримуємо <span class="m">∠1 = ∠3</span>. Це і є доведення — запиши його в зошит саме так.</p>
+   <div class="warn"><b>Пастка:</b> не будь-які два кути зі спільною стороною суміжні. Перевір, чи дві інші сторони лежать на одній прямій.</div>`,
+   visual:"angles",
+   ex:[
+    {q:"Один із суміжних кутів дорівнює 47°. Знайдіть другий.", s:[["<span class='m'>180° − 47° = 133°</span>","Сума суміжних — 180°."]], a:"133°"},
+    {q:"Один із суміжних кутів на 30° більший за другий. Знайдіть їх.", s:[
+      ["Менший <span class='m'>x</span>, більший <span class='m'>x + 30°</span>",""],
+      ["<span class='m'>x + x + 30° = 180° → 2x = 150° → x = 75°</span>",""]], a:"75° і 105°"},
+    {q:"Суміжні кути відносяться як 2 : 7. Знайдіть їх.", s:[
+      ["Кути: <span class='m'>2k</span> і <span class='m'>7k</span>","Відношення 2 : 7 означає: перший складається з 2 рівних частин, другий — із 7."],
+      ["<span class='m'>9k = 180° → k = 20°</span>",""]], a:"40° і 140°"},
+    {q:"Сума двох вертикальних кутів дорівнює 140°. Знайдіть усі чотири кути при перетині прямих.", s:[
+      ["Вертикальні рівні: кожен <span class='m'>140° : 2 = 70°</span>",""],
+      ["Два інші — суміжні до них: <span class='m'>180° − 70° = 110°</span>",""]], a:"70°, 110°, 70°, 110°"},
+    {q:"Доведіть, що бісектриси двох суміжних кутів перпендикулярні.", s:[
+      ["Нехай суміжні кути α і β: <span class='m'>α + β = 180°</span>",""],
+      ["Бісектриси ділять їх навпіл: кут між бісектрисами <span class='m'>α/2 + β/2</span>",""],
+      ["<span class='m'>α/2 + β/2 = (α + β)/2 = 90°</span>","Отже, бісектриси утворюють прямий кут."]], a:"кут між бісектрисами 90°, що й треба було довести"}],
+   quiz:[["Чи можуть обидва суміжні кути бути гострими?","ні: тоді їх сума була б менша за 180°"],["Суміжний кут до прямого — це…","теж прямий, 90°"],["При перетині прямих один кут 35°. Найбільший із чотирьох кутів?","145°"]],
+   fact:"Трюки на самокаті вимірюють у градусах: 180 — розворот задом наперед (промінь стає доповняльним), 360 — повний оберт, 540 — півтора. Розгорнутий кут — це буквально «180» у скейт-парку."},
+
+  {id:"g4", m:"Жовтень–листопад", t:"Перпендикулярні прямі. Перпендикуляр і відстань",
+   hook:"Найкоротший шлях від точки до прямої завжди йде під прямим кутом. Тому стовпи ставлять перпендикулярно до землі, а не навскіс.",
+   theory:`<p>Прямі <b>перпендикулярні</b> (<span class="m">a ⊥ b</span>), якщо при перетині утворюють прямий кут. Тоді всі чотири кути прямі (суміжні й вертикальні!).</p>
+   <p><b>Перпендикуляр</b> з точки A на пряму — відрізок AH, де <span class="m">AH ⊥ a</span>, H — <b>основа перпендикуляра</b>. Будь-який інший відрізок AM до прямої — <b>похила</b>.</p>
+   <div class="rule"><b>Теорема</b>Через точку, що не лежить на прямій, можна провести лише одну пряму, перпендикулярну до даної.</div>
+   <p><b>Відстань від точки до прямої</b> — довжина перпендикуляра. Він коротший за будь-яку похилу.</p>`,
+   visual:"perp",
+   ex:[
+    {q:"При перетині двох прямих один із кутів 90°. Доведіть, що решта кутів теж прямі.", s:[
+      ["Суміжний до 90°: <span class='m'>180° − 90° = 90°</span>",""],
+      ["Два інші — вертикальні до вже знайдених, тому теж 90°",""]], a:"усі чотири кути по 90°"},
+    {q:"∠AOB = 90°, промінь OC — усередині, ∠AOC = 3·∠COB. Знайдіть ∠COB.", s:[["<span class='m'>3x + x = 90° → x = 22,5°</span>",""]], a:"22,5°"}],
+   quiz:[["Скільки перпендикулярів можна провести з точки до прямої?","тільки один"]],
+   fact:""},
+
+  {id:"g5", m:"Листопад", t:"Трикутник. Перша ознака рівності трикутників",
+   hook:"Щоб довести, що два трикутники однакові, не треба міряти все — досить трьох елементів.",
+   theory:`<p><b>Перша ознака (СКС):</b> якщо дві сторони і кут між ними одного трикутника дорівнюють відповідним елементам іншого, трикутники рівні.</p>`, ex:[], quiz:[], fact:""},
+  {id:"g6", m:"Грудень", t:"Друга і третя ознаки рівності трикутників",
+   hook:"Ще два способи довести рівність: через сторону з кутами і через три сторони.",
+   theory:`<p><b>Друга (КСК):</b> сторона і два прилеглі кути. <b>Третя (ССС):</b> три сторони. Саме тому трикутна рама жорстка, а чотирикутна «складається».</p>`, ex:[], quiz:[], fact:""},
+  {id:"g7", m:"Січень", t:"Рівнобедрений трикутник. Медіана, бісектриса, висота",
+   hook:"У рівнобедреному трикутнику одна лінія виконує три ролі одночасно.",
+   theory:`<p>Кути при основі рівні. Медіана, проведена до основи, є і бісектрисою, і висотою.</p>`, ex:[], quiz:[], fact:""},
+  {id:"g8", m:"Лютий–березень", t:"Паралельні прямі. Ознаки паралельності",
+   hook:"Рейки, лінії зошита, грані рампи: паралельність навколо нас. Як довести її, не продовжуючи прямі до нескінченності?",
+   theory:`<p>Січна утворює з двома прямими пари кутів: різносторонні, відповідні, односторонні. Через них і перевіряють паралельність.</p>`, ex:[], quiz:[], fact:""},
+  {id:"g9", m:"Квітень", t:"Сума кутів трикутника. Зовнішній кут",
+   hook:"У будь-якого трикутника, від мікроскопічного до розміром із країну, сума кутів — 180°.",
+   theory:`<p><span class="m">∠A + ∠B + ∠C = 180°</span>. Зовнішній кут дорівнює сумі двох внутрішніх, не суміжних із ним.</p>`, ex:[], quiz:[], fact:""},
+  {id:"g10", m:"Травень", t:"Коло і круг. Дотична. Геометричні побудови",
+   hook:"Побудови циркулем і лінійкою: геометрія, якою користувалися архітектори тисячі років.",
+   theory:`<p>Коло, радіус, діаметр, хорда, дотична (перпендикулярна до радіуса в точці дотику). Побудова бісектриси, перпендикуляра, середини відрізка.</p>`, ex:[], quiz:[], fact:""}
+  ]};
+
+/* ---------------- ФІЗИКА ---------------- */
+S.physics = {
+  name:"Фізика", short:"Фізика", sub:"Вимірювання · речовина · рух", cur:2,
+  topics:[
+  {id:"p1", m:"Вересень", t:"Фізика — наука про природу. Тіла, речовини, явища",
+   hook:"Фізик дивиться на світ і питає: що саме тут відбувається і як це виміряти?",
+   theory:`<p><b>Фізичне тіло</b> — будь-який предмет (самокат, м'яч). <b>Речовина</b> — те, з чого він зроблений (алюміній, гума). <b>Фізичне явище</b> — будь-яка зміна: рух, нагрівання, світіння, звук.</p>
+   <p>Методи пізнання: спостереження → гіпотеза → експеримент → висновок.</p>`, ex:[], quiz:[["Самокат — це тіло, речовина чи явище?","тіло"],["Іржавіння заліза — фізичне явище?","ні, хімічне: утворюється нова речовина"]], fact:""},
+
+  {id:"p2", m:"Вересень–жовтень", t:"Фізичні величини. Вимірювання. Ціна поділки",
+   hook:"Будь-яке вимірювання — неточне. Уміння сказати, наскільки саме неточне, і відрізняє фізика від людини з лінійкою.",
+   theory:`<p><b>Фізична величина</b> = число + одиниця. Основні одиниці СІ: метр (м), кілограм (кг), секунда (с).</p>
+   <div class="rule"><b>Ціна поділки</b><span class="m">C = (більше значення − менше значення) : кількість поділок між ними</span><br>Беремо два сусідні <b>підписані</b> штрихи.</div>
+   <p><b>Похибка</b> приладу зазвичай дорівнює половині ціни поділки. Записуємо так: <span class="m">V = (65 ± 2,5) мл</span>.</p>
+   <p><b>Об'єм тіла неправильної форми</b> — мензуркою: різниця рівнів води до і після занурення.</p>`,
+   visual:"cylinder",
+   ex:[
+    {q:"Визначте ціну поділки мензурки на малюнку та об'єм рідини.", s:[
+      ["Сусідні підписані штрихи: 60 і 80 мл",""],
+      ["Між ними 4 поділки: <span class='m'>(80 − 60) : 4 = 5</span> мл","Рахуємо проміжки, а не штрихи."],
+      ["Рівень — на першому штриху над 60: <span class='m'>60 + 5 = 65</span> мл","Дивимось на нижній край меніска, очі на рівні рідини."]], a:"ціна поділки 5 мл, V = 65 мл"},
+    {q:"У мензурці було 60 мл води. Після занурення гайки рівень став 75 мл. Який об'єм гайки?", s:[["<span class='m'>75 − 60 = 15</span> мл","Тіло витісняє стільки води, скільки займає саме."],["1 мл = 1 см³",""]], a:"15 см³"},
+    {q:"Стос зі 100 аркушів має товщину 1 см. Яка товщина одного аркуша?", s:[["<span class='m'>1 см : 100 = 0,01 см = 0,1 мм</span>","Метод рядів: малу величину міряємо через багато однакових."]], a:"0,1 мм"}],
+   quiz:[["Скільки метрів у 2,5 км?","2500 м"],["Скільки секунд у 1,5 хв?","90 с"]],
+   fact:""},
+
+  {id:"p3", m:"Жовтень", t:"Будова речовини. Молекули, атоми, дифузія",
+   hook:"Твоє тіло, повітря і самокат складаються з частинок, які ніколи не стоять на місці. Навіть у льоду вони тремтять.",
+   theory:`<div class="rule"><b>Три положення молекулярно-кінетичної теорії</b>
+   1) усі речовини складаються з частинок (молекул, атомів), між якими є проміжки;<br>
+   2) частинки безперервно й хаотично рухаються;<br>
+   3) частинки взаємодіють: притягуються і відштовхуються.</div>
+   <p><b>Дифузія</b> — самовільне проникнення частинок однієї речовини між частинками іншої. Запах парфумів у кімнаті, чай, що забарвлює воду, — це дифузія.</p>
+   <ul><li>чим <b>вища температура</b>, тим швидше рухаються частинки й тим швидша дифузія;</li>
+   <li>у <b>газах</b> дифузія найшвидша, у рідинах повільніша, у твердих тілах — роки й десятиліття.</li></ul>
+   <p><b>Броунівський рух</b>: у 1827 р. ботанік Роберт Броун побачив у мікроскоп, що пилок у воді хаотично «тремтить». Його штовхають невидимі молекули води — прямий доказ їхнього руху.</p>
+   <p>Розмір молекули води — близько <span class="m">0,3 нм = 3·10⁻¹⁰ м</span>.</p>`,
+   visual:"diffusion",
+   ex:[
+    {q:"Чому цукор у гарячому чаї розчиняється швидше, ніж у холодному?", s:[["У гарячій воді молекули рухаються швидше","Температура — міра швидкості руху частинок."],["Частіше «вибивають» молекули цукру з кристала і швидше розносять їх",""]], a:"через вищу швидкість руху молекул (дифузія пришвидшується)"},
+    {q:"Уяви, що молекулу води (0,3 нм) збільшили до розміру яблука (7 см). До якого розміру тоді виросло б саме яблуко?", s:[
+      ["Збільшення: <span class='m'>0,07 м : (3·10⁻¹⁰ м) ≈ 2,3·10⁸</span> разів","Ділимо новий розмір на старий, усе в метрах."],
+      ["Яблуко: <span class='m'>0,07 м · 2,3·10⁸ ≈ 1,6·10⁷ м = 16 000 км</span>",""],
+      ["Діаметр Землі — близько 12 700 км",""]], a:"яблуко стало б більшим за Землю"},
+    {q:"Чому два відполіровані металеві бруски можуть «злипнутися», а два шматки розбитої чашки — ні?", s:[["Притягання молекул діє лише на дуже малих відстанях",""],["Відполіровані поверхні можна зблизити до таких відстаней, нерівні уламки — ні",""]], a:"молекули притягуються тільки зблизька"}],
+   quiz:[["Де дифузія найшвидша: у газі, рідині чи твердому тілі?","у газі"],["Чи рухаються молекули в льоду?","так, коливаються біля своїх місць"],["Чому взимку запахи слабші?","нижча температура — повільніша дифузія"]],
+   fact:"В одному кубічному сантиметрі повітря близько 27 мільярдів мільярдів молекул (2,7·10¹⁹). Якби щосекунди рахувати по одній, знадобилось би у 2000 разів більше часу, ніж існує Всесвіт."},
+
+  {id:"p4", m:"Листопад", t:"Взаємодія частинок. Агрегатні стани речовини",
+   hook:"Вода, лід і пара — одні й ті самі молекули. Різниця лише в тому, як щільно вони стоять і як швидко рухаються.",
+   theory:`<p><b>Тверде тіло</b>: частинки щільно, у певному порядку, коливаються на місці. Зберігає і форму, і об'єм.</p>
+   <p><b>Рідина</b>: частинки щільно, але «перескакують». Зберігає об'єм, форму бере від посудини.</p>
+   <p><b>Газ</b>: частинки далеко, рухаються вільно. Займає весь наданий об'єм, легко стискається.</p>`,
+   visual:"states",
+   ex:[
+    {q:"Чому газ легко стиснути, а рідину майже неможливо?", s:[["У газі відстані між частинками у десятки разів більші за самі частинки",""],["У рідині частинки вже майже дотикаються, а на малих відстанях вони відштовхуються",""]], a:"у газі великі проміжки між частинками"},
+    {q:"Чому пляшка з водою в морозилці може тріснути?", s:[["Вода при замерзанні розширюється приблизно на 9%","Це виняток: більшість речовин при твердінні стискаються."]], a:"лід займає більший об'єм, ніж вода"}],
+   quiz:[["Який стан не має ні власної форми, ні об'єму?","газ"]], fact:""},
+
+  {id:"p5", m:"Листопад–грудень", t:"Механічний рух. Траєкторія, шлях, переміщення",
+   hook:"Ти на самокаті рухаєшся відносно рампи, але не рухаєшся відносно самоката. Рух завжди відносний.",
+   theory:`<p><b>Механічний рух</b> — зміна положення тіла відносно інших тіл з часом. <b>Траєкторія</b> — лінія руху, <b>шлях</b> — її довжина, <b>переміщення</b> — відрізок від початку до кінця.</p>`,
+   ex:[{q:"Райдер з'їхав з рампи 6 м і повернувся на те саме місце. Шлях і переміщення?", s:[["Шлях: <span class='m'>6 + 6 = 12</span> м",""],["Переміщення: 0 — кінець збігся з початком",""]], a:"12 м і 0"}], quiz:[], fact:""},
+  {id:"p6", m:"Грудень–січень", t:"Швидкість. Графіки руху",
+   hook:"Швидкість показує, який шлях проходить тіло за одиницю часу. На графіку вона видна як нахил лінії.",
+   theory:`<p><span class="m">v = s / t</span>. Переведення: <span class="m">км/год : 3,6 = м/с</span>.</p>`,
+   visual:"stgraph",
+   ex:[{q:"Райдер проїхав 300 м за 1 хв. Швидкість у м/с і км/год?", s:[["<span class='m'>300 м : 60 с = 5 м/с</span>",""],["<span class='m'>5 · 3,6 = 18 км/год</span>",""]], a:"5 м/с = 18 км/год"}], quiz:[], fact:""},
+  {id:"p7", m:"Січень", t:"Рух по колу. Період і частота",
+   hook:"Оберт «360» на самокаті — рівномірний рух по колу. Скільки триває один оберт — це період.",
+   theory:`<p>Період <span class="m">T = t / N</span>, частота <span class="m">ν = N / t</span>, одиниця — Гц (оберт за секунду).</p>`,
+   ex:[{q:"Колесо самоката робить 20 обертів за 4 с. Знайдіть період і частоту.", s:[["<span class='m'>T = 4 : 20 = 0,2 с</span>",""],["<span class='m'>ν = 20 : 4 = 5 Гц</span>",""]], a:"T = 0,2 с; ν = 5 Гц"}], quiz:[], fact:""},
+  {id:"p8", m:"Лютий", t:"Маса. Густина речовини",
+   hook:"Чому алюмінієва дека легка, а сталева — важка, хоча вони однакові за розміром? Справа в густині.",
+   theory:`<p><span class="m">ρ = m / V</span>. Алюміній: 2,7 г/см³, сталь: 7,8 г/см³, вода: 1 г/см³.</p>`,
+   ex:[{q:"Брусок масою 54 г має об'єм 20 см³. З чого він?", s:[["<span class='m'>ρ = 54 : 20 = 2,7 г/см³</span>",""],["Шукаємо в таблиці густин",""]], a:"алюміній"}], quiz:[], fact:""},
+  {id:"p9", m:"Березень–травень", t:"Сила. Сила тяжіння, пружності, тертя",
+   hook:"Сила — причина зміни швидкості. Без тертя ти б не загальмував, а без сили тяжіння не приземлився б після стрибка.",
+   theory:`<p>Сила тяжіння <span class="m">F = mg</span>, де <span class="m">g ≈ 10 Н/кг</span>. Одиниця сили — ньютон (Н).</p>`,
+   ex:[{q:"Знайдіть силу тяжіння, що діє на тіло масою 40 кг.", s:[["<span class='m'>F = 40 · 10 = 400 Н</span>",""]], a:"400 Н"}], quiz:[], fact:""}
+  ]};
+
+/* ---------------- ІСТОРІЯ ---------------- */
+S.history = {
+  name:"Історія", short:"Історія", sub:"Україна і світ · Середньовіччя", cur:2,
+  topics:[
+  {id:"h1", m:"Вересень", t:"Що таке Середньовіччя. Періодизація",
+   hook:"Тисяча років між античністю і Новим часом: лицарі, замки, перші університети і народження Русі.",
+   theory:`<p>Середні віки — з <b>476 р.</b> (падіння Західної Римської імперії) до кінця XV ст. (1492 — відкриття Америки). Поділяють на раннє (V–XI ст.), високе (XI–XIII ст.) і пізнє (XIV–XV ст.) Середньовіччя.</p>
+   <div class="rule"><b>Як визначити століття</b>відкинь дві останні цифри і додай 1: <span class="m">476 → 4 + 1 = V ст.</span>, <span class="m">988 → 9 + 1 = X ст.</span> Виняток: роки на «00» — <span class="m">1500</span> — це ще XV ст.</div>`,
+   ex:[], quiz:[["У якому столітті 1240 рік?","XIII ст."],["Скільки років минуло від 476 до 1492?","1016 років"]], fact:""},
+
+  {id:"h2", m:"Вересень", t:"Велике переселення народів. Падіння Західної Римської імперії",
+   hook:"У IV–VII ст. Європа рушила з місця: цілі народи йшли тисячі кілометрів, і найбільша держава античності не встояла.",
+   theory:`<p>У <b>375 р.</b> зі степів прийшли <b>гуни</b> й розгромили готів, які жили на наших землях (Північне Причорномор'я). Готи кинулися на захід, у межі Римської імперії — почалося Велике переселення народів.</p>
+   <ul><li><b>410</b> — вестготи на чолі з Аларіхом пограбували Рим;</li>
+   <li><b>451</b> — битва на Каталаунських полях: римляни та їхні союзники зупинили гунів Аттіли;</li>
+   <li><b>455</b> — Рим пограбували вандали (звідси слово «вандалізм»);</li>
+   <li><b>476</b> — вождь германців Одоакр скинув останнього імператора Ромула Августула. Кінець Західної Римської імперії.</li></ul>
+   <p>На уламках імперії виникли «варварські королівства»: франків, остготів, вестготів, вандалів.</p>`,
+   visual:"tl_h2",
+   ex:[
+    {q:"Чому Західна Римська імперія не витримала натиску варварів?", s:[["Внутрішня криза: слабка влада, боротьба за трон, бідніли міста",""],["Армія складалася переважно з найманців-германців",""],["Зовнішній тиск — хвилі переселенців, яких гнали гуни",""]], a:"поєднання внутрішньої слабкості і зовнішнього натиску"}],
+   quiz:[["Хто скинув останнього імператора Заходу?","Одоакр, 476 р."],["Звідки слово «вандалізм»?","від племені вандалів, що пограбувало Рим 455 р."]], fact:""},
+
+  {id:"h3", m:"Жовтень", t:"Візантійська імперія. Юстиніан Великий",
+   hook:"Рим упав у 476 р.? Лише наполовину. Східна половина прожила ще майже тисячу років — і саме звідти до Русі прийшли християнство, писемність і храми.",
+   theory:`<p>Східна Римська імперія зі столицею в <b>Константинополі</b> пережила падіння Заходу. Місто заснував імператор Костянтин у <b>330 р.</b> на місці грецької колонії Візантій.</p>
+   <div class="warn"><b>Цікаво:</b> самі візантійці назви «Візантія» не знали. Вони називали себе <b>ромеями</b>, тобто римлянами. «Візантією» державу назвали історики лише в XVI ст.</div>
+   <p><b>Чому вистояла:</b> багаті торгові міста, вигідне місце на перетині шляхів Європа—Азія, потрійні мури Константинополя, сильний флот і «грецький вогонь», який горів навіть на воді.</p>
+   <p><b>Влада:</b> імператор (василевс) мав необмежену владу, яку вважали даною від Бога; йому допомагали чиновники.</p>
+   <p><b>Юстиніан I</b> (правив 527–565):</p>
+   <ul><li>прагнув відродити Римську імперію — повернув Італію, Північну Африку, частину Іспанії;</li>
+   <li>видав <b>Кодекс Юстиніана</b> — звід римського права, на який досі спирається право багатьох країн Європи;</li>
+   <li>збудував <b>собор Святої Софії</b> (537) — найбільший храм світу майже тисячу років;</li>
+   <li>придушив повстання «Ніка» (532) у Константинополі.</li></ul>
+   <p><b>Візантія і Україна:</b> Херсонес у Криму був візантійським містом; Русь торгувала з Константинополем шляхом «із варягів у греки»; у <b>988 р.</b> Володимир Великий прийняв християнство з Візантії; Софію Київську назвали на честь Софії Константинопольської.</p>
+   <p>Кінець імперії — <b>1453 р.</b>: Константинополь захопили турки-османи.</p>`,
+   visual:"tl_h3",
+   ex:[
+    {q:"Порахуйте: скільки років проіснувала Візантія після падіння Західної Римської імперії?", s:[["<span class='m'>1453 − 476 = 977</span> років","Від пізнішої дати віднімаємо ранішу."]], a:"977 років — майже тисячоліття"},
+    {q:"У якому столітті збудовано Святу Софію (537 р.) і впала Візантія (1453 р.)?", s:[["<span class='m'>537 → 5 + 1 = VI ст.</span>",""],["<span class='m'>1453 → 14 + 1 = XV ст.</span>",""]], a:"VI ст. і XV ст."},
+    {q:"Чим Кодекс Юстиніана важливий досі?", s:[["Він зібрав і впорядкував закони Риму за сотні років",""],["Його вивчали в середньовічних університетах, і на ньому побудовано цивільне право більшості країн Європи, зокрема України",""]], a:"основа сучасного європейського права"},
+    {q:"Що спільного між Софією Константинопольською і Софією Київською?", s:[["Обидві присвячені Софії — Премудрості Божій",""],["Київська збудована за Ярослава Мудрого за візантійським зразком, з мозаїками й фресками візантійських майстрів",""]], a:"назва, призначення, візантійський стиль"}],
+   quiz:[["Як називали себе візантійці?","ромеї"],["Хто правив Візантією в 527–565 рр.?","Юстиніан I"],["Хто захопив Константинополь у 1453 р.?","турки-османи"]],
+   fact:"Слово «василевс» (цар) прийшло з грецької, а від нього — ім'я Василь, тобто «царський». Так Візантія досі живе в українських іменах: Олена, Софія, Олександр, Ірина — теж грецькі."},
+
+  {id:"h4", m:"Жовтень–листопад", t:"Арабський світ. Виникнення ісламу. Халіфат",
+   hook:"Цифри, якими ти рахуєш, і саме слово «алгебра» прийшли до Європи від арабів.",
+   theory:`<p>Аравійський півострів: пустелі, кочівники-бедуїни, торгові міста Мекка і Медина. Близько 610 р. пророк <b>Мухаммед</b> почав проповідувати нову віру — <b>іслам</b> («покора Богові»). Священна книга — <b>Коран</b>.</p>
+   <p><b>622 р. — Хіджра</b>: переселення Мухаммеда з Мекки до Медини. З цього року мусульмани ведуть літочислення.</p>
+   <p>Наступники пророка — <b>халіфи</b>. За сто років <b>Арабський халіфат</b> простягнувся від Іспанії до Індії.</p>
+   <p><b>Культура:</b> у Багдаді працював «Дім мудрості», де перекладали грецьких учених. Математик <b>аль-Хорезмі</b> написав книгу «аль-джабр» — звідси «алгебра». Цифри 0–9 араби запозичили в Індії й передали Європі.</p>`,
+   visual:"tl_h4",
+   ex:[{q:"Чому наші цифри називають арабськими, хоча придумали їх в Індії?", s:[["Європейці дізналися про них з арабських книжок",""],["Головна перевага — позиційний запис і нуль: зручно рахувати стовпчиком, на відміну від римських цифр",""]], a:"Європа отримала їх від арабів"}],
+   quiz:[["Що означає слово «халіф»?","наступник (пророка)"],["Рік Хіджри?","622"]], fact:""},
+
+  {id:"h5", m:"Листопад", t:"Франкська держава. Імперія Карла Великого",
+   hook:"Король, який ледве вмів писати, створив найбільшу державу Західної Європи після Риму.",
+   theory:`<p>Хлодвіг (кінець V ст.), Карл Мартел, Піпін Короткий. 800 р. — Карла Великого коронують імператором. 843 р. — Верденський поділ: зародки Франції, Німеччини, Італії.</p>`, ex:[], quiz:[], fact:""},
+  {id:"h6", m:"Грудень", t:"Слов'яни. Розселення, побут, вірування",
+   hook:"Хто жив на наших землях до появи Русі і в яких богів вірив.",
+   theory:`<p>Анти і склавини (VI ст.), племінні союзи: поляни, деревляни, сіверяни, древляни, волиняни, хорвати. Землеробство, віче, язичницькі боги — Перун, Дажбог, Велес.</p>`, ex:[], quiz:[], fact:""},
+  {id:"h7", m:"Січень–лютий", t:"Утворення Русі. Перші князі",
+   hook:"Олег, Ігор, Ольга, Святослав: князі, походи на Константинополь і перші договори з Візантією.",
+   theory:`<p>882 — Олег у Києві. Походи на Царгород, полюддя, реформи Ольги, походи Святослава.</p>`, ex:[], quiz:[], fact:""},
+  {id:"h8", m:"Лютий–березень", t:"Русь за Володимира Великого і Ярослава Мудрого",
+   hook:"Хрещення 988 р., «Руська правда», Софія Київська: Русь стає однією з найбільших держав Європи.",
+   theory:`<p>988 — хрещення Русі. Ярослав Мудрий (1019–1054): «Руська правда», будівництво, династичні шлюби.</p>`, ex:[], quiz:[], fact:""},
+  {id:"h9", m:"Квітень", t:"Середньовічне суспільство: феодали, селяни, лицарі, міста",
+   hook:"«Одні моляться, другі воюють, треті працюють» — так середньовічна людина уявляла собі суспільство.",
+   theory:`<p>Феод, сеньйор і васал, кодекс лицаря, замок, середньовічне місто і цехи.</p>`, ex:[], quiz:[], fact:""},
+  {id:"h10", m:"Травень", t:"Хрестові походи",
+   hook:"Двісті років війн за Єрусалим, які змінили і Європу, і Схід.",
+   theory:`<p>1096–1270 рр. Причини, учасники, наслідки: торгівля, обмін знаннями.</p>`, ex:[], quiz:[], fact:""}
+  ]};
+
+const ORDER = ["algebra","geometry","physics","history"];
+
+/* =========================================================
+   ЗБЕРЕЖЕННЯ (локально в браузері)
+   ========================================================= */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem("mihail."+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("mihail."+k, JSON.stringify(v)); }catch(e){} }
+};
+const curIdx = s => { const v = store.get("cur."+s, null); return (v===null || v>=S[s].topics.length) ? S[s].cur : v; };
+const hwAll = s => store.get("hw."+s, []);
+
+/* =========================================================
+   ДАТИ
+   ========================================================= */
+const pad = n => String(n).padStart(2,"0");
+const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+const addDays = (iso, k) => { const d = new Date(iso+"T12:00"); d.setDate(d.getDate()+k); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+const WD = ["нд","пн","вт","ср","чт","пт","сб"];
+const MO = ["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
+const fmt = iso => { if(!iso) return "—"; const d = new Date(iso+"T12:00"); return `${WD[d.getDay()]}, ${d.getDate()} ${MO[d.getMonth()]}`; };
+const fmtShort = iso => { if(!iso) return "—"; const d = new Date(iso+"T12:00"); return `${pad(d.getDate())}.${pad(d.getMonth()+1)}`; };
+const daysTo = iso => Math.round((new Date(iso+"T12:00") - new Date(todayISO()+"T12:00"))/864e5);
+const dueLabel = iso => { const k = daysTo(iso); if(k===0) return "сьогодні"; if(k===1) return "завтра"; if(k<0) return `прострочено ${-k} дн.`; return `через ${k} дн.`; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* =========================================================
+   ВІЗУАЛІЗАЦІЇ
+   ========================================================= */
+let stopAnim = null;
+const P = (cx,cy,r,deg) => [cx + r*Math.cos(deg*Math.PI/180), cy - r*Math.sin(deg*Math.PI/180)];
+function arc(cx,cy,r,a0,a1){ const [x0,y0]=P(cx,cy,r,a0),[x1,y1]=P(cx,cy,r,a1); const large = (a1-a0)>180?1:0; return `M${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 ${large} 0 ${x1.toFixed(1)} ${y1.toFixed(1)}`; }
+
+const V = {
+ balance: () => `<svg viewBox="0 0 380 215" width="380" role="img" aria-label="Ваги: три ікси і дві одиниці зліва, одинадцять справа">
+   <path class="s" d="M190 50 V188"/><path class="fs s1" d="M160 200 L190 186 L220 200 Z"/>
+   <path class="s" d="M70 50 H310"/><circle class="fa" cx="190" cy="50" r="5"/>
+   <path class="s1" d="M70 50 L8 115 M70 50 L132 115 M310 50 L248 115 M310 50 L372 115"/>
+   <path class="s" d="M4 115 Q70 140 136 115 Z"/><path class="s" d="M244 115 Q310 140 376 115 Z"/>
+   ${[12,38,64].map(x=>`<rect class="fa" x="${x}" y="92" width="22" height="22" rx="3"/><text x="${x+11}" y="108" text-anchor="middle" font-size="13" style="fill:var(--surface)">x</text>`).join("")}
+   <circle class="fb" cx="98" cy="104" r="10"/><text x="98" y="108.5" text-anchor="middle" font-size="12" style="fill:var(--surface)">1</text>
+   <circle class="fb" cx="122" cy="104" r="10"/><text x="122" y="108.5" text-anchor="middle" font-size="12" style="fill:var(--surface)">1</text>
+   <rect class="fb" x="280" y="84" width="60" height="30" rx="4"/><text x="310" y="104" text-anchor="middle" font-size="15" style="fill:var(--surface)">11</text>
+   <text x="190" y="24" text-anchor="middle" font-size="16" font-weight="600">3x + 2 = 11</text></svg>
+   <div class="cap">Зняли з обох чаш по 2 → <b>3x = 9</b>. Розділили обидві чаші на 3 → <b>x = 3</b>. Рівновага не порушилась.</div>`,
+
+ area: () => { let c=""; for(let i=0;i<3;i++) for(let j=0;j<2;j++) c+=`<rect class="fs s1" x="${40+i*80}" y="${30+j*60}" width="80" height="60"/><text x="${80+i*80}" y="${65+j*60}" text-anchor="middle" font-size="15">ab</text>`;
+   return `<svg viewBox="0 0 300 200" width="300" role="img" aria-label="Прямокутник 3a на 2b розбитий на 6 клітин ab">${c}
+   <rect class="sa" x="40" y="30" width="240" height="120"/>
+   ${[0,1,2].map(i=>`<text x="${80+i*80}" y="22" text-anchor="middle" font-size="14" class="fa" style="fill:var(--accent)">a</text>`).join("")}
+   ${[0,1].map(j=>`<text x="26" y="${64+j*60}" text-anchor="middle" font-size="14" style="fill:var(--accent2)">b</text>`).join("")}
+   <text x="160" y="182" text-anchor="middle" font-size="16" font-weight="600">3a · 2b = 6ab</text></svg>
+   <div class="cap">Добуток одночленів — це площа: 3 стовпчики по <i>a</i> на 2 рядки по <i>b</i> дають 6 клітинок площею <i>ab</i>.</div>`; },
+
+ square: () => `<svg viewBox="0 0 270 270" width="260" role="img" aria-label="Квадрат зі стороною a плюс b">
+   <rect x="25" y="25" width="140" height="140" style="fill:var(--soft)" class="sa"/><rect x="165" y="25" width="80" height="140" class="s1" style="fill:var(--surface)"/>
+   <rect x="25" y="165" width="140" height="80" class="s1" style="fill:var(--surface)"/><rect x="165" y="165" width="80" height="80" class="sb" style="fill:var(--soft)"/>
+   <text x="95" y="100" text-anchor="middle" font-size="18">a²</text><text x="205" y="100" text-anchor="middle" font-size="16">ab</text>
+   <text x="95" y="210" text-anchor="middle" font-size="16">ab</text><text x="205" y="210" text-anchor="middle" font-size="18">b²</text>
+   <text x="95" y="18" text-anchor="middle" font-size="13">a</text><text x="205" y="18" text-anchor="middle" font-size="13">b</text>
+   <text x="14" y="100" text-anchor="middle" font-size="13">a</text><text x="14" y="210" text-anchor="middle" font-size="13">b</text></svg>
+   <div class="cap">(a + b)² — площа великого квадрата = a² + ab + ab + b²</div>`,
+
+ protractor: () => { const cx=170, cy=180, R=140; let t="";
+   for(let d=0; d<=180; d+=5){ const L = d%10===0 ? 12 : 6; const [x0,y0]=P(cx,cy,R,d),[x1,y1]=P(cx,cy,R-L,d); t+=`<line x1="${x0.toFixed(1)}" y1="${y0.toFixed(1)}" x2="${x1.toFixed(1)}" y2="${y1.toFixed(1)}" class="s1"/>`;
+     if(d%30===0){ const [tx,ty]=P(cx,cy,R-26,d); t+=`<text x="${tx.toFixed(1)}" y="${(ty+4).toFixed(1)}" text-anchor="middle" font-size="11" class="fm" style="fill:var(--muted)">${d}</text>`; } }
+   const a=65, [ax,ay]=P(cx,cy,R+12,a), [lx,ly]=P(cx,cy,48,a/2);
+   return `<svg viewBox="0 0 340 200" width="340" role="img" aria-label="Транспортир показує кут 65 градусів">
+   <path d="${arc(cx,cy,R,0,180)} Z" style="fill:var(--surface)" class="s1"/>${t}
+   <line x1="${cx}" y1="${cy}" x2="${cx+R+14}" y2="${cy}" class="sb"/><line x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" class="sb"/>
+   <path d="${arc(cx,cy,34,0,a)}" class="sa"/><text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" font-size="13" font-weight="600" style="fill:var(--accent)">65°</text>
+   <circle cx="${cx}" cy="${cy}" r="3.5" class="fi"/><text x="${cx-6}" y="${cy+16}" font-size="12">O</text></svg>
+   <div class="cap">Центр — у вершину O, нуль — на нижню сторону. Читаємо по шкалі, що від неї починається з нуля: 65°, а не 115°.</div>`; },
+
+ perp: () => `<svg viewBox="0 0 330 200" width="330" role="img" aria-label="Перпендикуляр AH і похила AM">
+   <line x1="10" y1="160" x2="320" y2="160" class="s"/><text x="306" y="152" font-size="13">a</text>
+   <line x1="130" y1="40" x2="130" y2="160" class="sa"/><line x1="130" y1="40" x2="250" y2="160" class="sb dash"/>
+   <path d="M130 146 H144 V160" class="s1"/>
+   <circle cx="130" cy="40" r="4" class="fi"/><circle cx="130" cy="160" r="4" class="fi"/><circle cx="250" cy="160" r="4" class="fi"/>
+   <text x="118" y="36" font-size="13">A</text><text x="118" y="178" font-size="13">H</text><text x="246" y="178" font-size="13">M</text>
+   <text x="138" y="104" font-size="12" style="fill:var(--accent)">перпендикуляр</text><text x="196" y="96" font-size="12" style="fill:var(--accent2)">похила</text></svg>
+   <div class="cap">AH ⊥ a. Перпендикуляр AH коротший за будь-яку похилу AM — тому саме він і є відстанню від точки до прямої.</div>`,
+
+ cylinder: () => { const x0=80, w=60, top=24, bot=244, scale=(bot-top)/110; let t="";
+   for(let v=0; v<=110; v+=5){ const y = bot - v*scale; const big = v%20===0; t+=`<line x1="${x0}" y1="${y.toFixed(1)}" x2="${x0+(big?22:12)}" y2="${y.toFixed(1)}" class="s1"/>`;
+     if(big) t+=`<text x="${x0+w+10}" y="${(y+4).toFixed(1)}" font-size="12">${v}</text>`; }
+   const ly = bot - 65*scale;
+   return `<svg viewBox="0 0 300 270" width="290" role="img" aria-label="Мензурка з рідиною до 65 мілілітрів">
+   <rect x="${x0}" y="${ly.toFixed(1)}" width="${w}" height="${(bot-ly).toFixed(1)}" style="fill:var(--accent2); opacity:.28"/>
+   <path d="M${x0} ${ly.toFixed(1)} Q${x0+w/2} ${(ly+7).toFixed(1)} ${x0+w} ${ly.toFixed(1)}" class="sb"/>
+   ${t}<path d="M${x0} 14 V${bot} Q${x0} ${bot+8} ${x0+8} ${bot+8} H${x0+w-8} Q${x0+w} ${bot+8} ${x0+w} ${bot} V14" class="s"/>
+   <text x="${x0+w+38}" y="${(ly+4).toFixed(1)}" font-size="12" style="fill:var(--accent2)">← 65 мл</text>
+   <text x="${x0+w+38}" y="${(bot-70*scale+4).toFixed(1)}" font-size="11" style="fill:var(--muted)">4 поділки</text>
+   <text x="${x0+w+38}" y="${(bot-56*scale+4).toFixed(1)}" font-size="11" style="fill:var(--muted)">між 60 і 80</text>
+   <text x="${x0-8}" y="${bot+24}" font-size="11" style="fill:var(--muted)">мл</text></svg>
+   <div class="cap">Ціна поділки = (80 − 60) : 4 = 5 мл. Рівень читаємо по нижньому краю меніска.</div>`; },
+
+ states: () => { const box=(ox,label,pts)=>`<rect x="${ox}" y="20" width="96" height="96" class="s1" style="fill:var(--surface)"/>${pts.map(([x,y])=>`<circle cx="${(ox+x).toFixed(1)}" cy="${(20+y).toFixed(1)}" r="5.5" class="fa"/>`).join("")}<text x="${ox+48}" y="136" text-anchor="middle" font-size="12">${label}</text>`;
+   const solid=[]; for(let i=0;i<7;i++) for(let j=0;j<7;j++) solid.push([12+i*12, 12+j*12]);
+   let s=7; const r=()=>{ s=(s*9301+49297)%233280; return s/233280; };
+   const liq=[]; for(let i=0;i<34;i++) liq.push([8+r()*80, 36+r()*54]);
+   const gas=[]; for(let i=0;i<9;i++) gas.push([10+r()*76, 10+r()*76]);
+   return `<svg viewBox="0 0 340 150" width="340" role="img" aria-label="Частинки у твердому тілі, рідині та газі">${box(4,"тверде",solid)}${box(122,"рідина",liq)}${box(240,"газ",gas)}</svg>
+   <div class="cap">Ті самі молекули — різна відстань між ними і різна свобода руху.</div>`; },
+
+ stgraph: () => { const ox=46, oy=170, W=260, H=140, tx=t=>ox+t*W/10, sy=s=>oy-s*H/50; let g="";
+   for(let t=0;t<=10;t+=2){ g+=`<line x1="${tx(t)}" y1="${oy}" x2="${tx(t)}" y2="${oy-H}" class="s1" style="opacity:.2"/><text x="${tx(t)}" y="${oy+16}" text-anchor="middle" font-size="11">${t}</text>`; }
+   for(let s=0;s<=50;s+=10){ g+=`<line x1="${ox}" y1="${sy(s)}" x2="${ox+W}" y2="${sy(s)}" class="s1" style="opacity:.2"/><text x="${ox-8}" y="${sy(s)+4}" text-anchor="end" font-size="11">${s}</text>`; }
+   return `<svg viewBox="0 0 330 205" width="330" role="img" aria-label="Графіки шляху двох райдерів">${g}
+   <line x1="${ox}" y1="${oy}" x2="${ox+W}" y2="${oy}" class="s"/><line x1="${ox}" y1="${oy}" x2="${ox}" y2="${oy-H}" class="s"/>
+   <line x1="${tx(0)}" y1="${sy(0)}" x2="${tx(10)}" y2="${sy(50)}" class="sa"/><line x1="${tx(0)}" y1="${sy(0)}" x2="${tx(10)}" y2="${sy(30)}" class="sb"/>
+   <text x="${tx(10)-4}" y="${sy(50)-6}" text-anchor="end" font-size="11" style="fill:var(--accent)">5 м/с</text><text x="${tx(10)-4}" y="${sy(30)-6}" text-anchor="end" font-size="11" style="fill:var(--accent2)">3 м/с</text>
+   <text x="${ox+W}" y="${oy+32}" text-anchor="end" font-size="11" style="fill:var(--muted)">t, с</text><text x="${ox-30}" y="${oy-H-8}" font-size="11" style="fill:var(--muted)">s, м</text></svg>
+   <div class="cap">Крутіша лінія — більша швидкість.</div>`; },
+
+ timeline: (ev, from, to) => { const W = 640, x = y => 30 + (y-from)*(W-60)/(to-from); let g = `<line x1="20" y1="80" x2="${W-20}" y2="80" class="s"/>`;
+   const step = (to-from) > 600 ? 100 : 50;
+   for(let y=Math.ceil(from/step)*step; y<=to; y+=step){ g+=`<line x1="${x(y)}" y1="76" x2="${x(y)}" y2="84" class="s1"/><text x="${x(y)}" y="${y%100===0?100:98}" text-anchor="middle" font-size="10" style="fill:var(--muted)">${y}</text>`; }
+   ev.forEach((e,i)=>{ const up = i%2===0, X = x(e[0]); const ty = up ? 46 - (i%4===0?0:14) : 124 + (i%4===1?0:14);
+     g+=`<line x1="${X}" y1="80" x2="${X}" y2="${up?ty+4:ty-12}" class="s1" style="stroke:var(--accent)"/><circle cx="${X}" cy="80" r="5" class="fa"/>
+     <text x="${X}" y="${ty-12}" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--accent)">${e[0]}</text><text x="${X}" y="${ty}" text-anchor="middle" font-size="11">${e[1]}</text>`; });
+   return `<svg viewBox="0 0 ${W} 160" width="${W}" style="min-width:560px" role="img" aria-label="Стрічка часу">${g}</svg><div class="cap">Стрічка часу. На телефоні її можна гортати вбік.</div>`; },
+ tl_h2: () => V.timeline([[375,"гуни в Європі"],[410,"вестготи в Римі"],[451,"Каталаунська битва"],[455,"вандали в Римі"],[476,"кінець Зах. Риму"]],350,500),
+ tl_h3: () => V.timeline([[330,"заснов. Константинополя"],[476,"падіння Заходу"],[537,"Свята Софія"],[988,"хрещення Русі"],[1037,"Софія Київська"],[1204,"хрестоносці"],[1453,"падіння Візантії"]],300,1500),
+ tl_h4: () => V.timeline([[570,"нар. Мухаммеда"],[622,"Хіджра"],[632,"перші халіфи"],[711,"араби в Іспанії"],[762,"заснов. Багдада"],[830,"аль-Хорезмі"]],550,860),
+
+ /* інтерактив: степінь */
+ power: () => `<div class="ctrl"><span>Основа</span><div class="seg" id="pw-b"><button aria-pressed="true" data-b="2">2</button><button aria-pressed="false" data-b="3">3</button><button aria-pressed="false" data-b="10">10</button></div>
+   <label>Показник n = <b id="pw-nv">5</b> <input id="pw-n" type="range" min="1" max="10" value="5"></label></div>
+   <div class="readout" id="pw-out"></div><div class="cells" id="pw-cells" aria-hidden="true"></div>
+   <div class="cap">Кожна клітинка — одиниця. Збільш показник на 1, і клітинок стане в «основу» разів більше.</div>`,
+
+ /* інтерактив: кути */
+ angles: () => `<div class="ctrl"><label>Поверни пряму: ∠1 = <b id="an-v">50</b>° <input id="an-r" type="range" min="10" max="170" value="50"></label></div><div id="an-svg"></div>
+   <div class="readout" id="an-out"></div>`,
+
+ /* інтерактив: дифузія */
+ diffusion: () => `<div class="ctrl"><button class="btn small" id="df-go" type="button">Прибрати перегородку</button><button class="btn small ghost" id="df-reset" type="button">Спочатку</button>
+   <label>Температура <input id="df-t" type="range" min="1" max="10" value="4"></label></div>
+   <canvas id="df-c" height="220"></canvas><div class="readout">Перемішано: <span class="big" id="df-p">0</span>%</div>
+   <div class="cap">Дві «речовини» розділені перегородкою. Прибери її і порівняй, як швидко вони змішуються при низькій і високій температурі.</div>`
+};
+
+const W8 = {
+ power(root){
+   let b=2, n=5; const maxN={2:10,3:6,10:3};
+   const r = root.querySelector("#pw-n"), out = root.querySelector("#pw-out"), cells = root.querySelector("#pw-cells"), nv = root.querySelector("#pw-nv");
+   const draw = () => { r.max = maxN[b]; if(n>maxN[b]) { n=maxN[b]; r.value=n; } nv.textContent=n;
+     const v = Math.pow(b,n); out.innerHTML = `${b}<sup>${n}</sup> = ${Array(n).fill(b).join(" · ")} = <span class="big">${v.toLocaleString("uk-UA")}</span>`;
+     const prev = n>1 ? Math.pow(b,n-1) : 0; cells.innerHTML = Array.from({length:v},(_,i)=>`<i${i>=prev?' class="n"':''}></i>`).join(""); };
+   root.querySelectorAll("#pw-b button").forEach(x=>x.onclick=()=>{ b=+x.dataset.b; root.querySelectorAll("#pw-b button").forEach(y=>y.setAttribute("aria-pressed", y===x)); draw(); });
+   r.oninput = () => { n=+r.value; draw(); }; draw();
+   const c = document.createElement("div"); c.className="cap"; c.innerHTML="Синім — те, що було при n − 1; червоним — що додалося після ще одного множення."; cells.after(c);
+ },
+ angles(root){
+   const r = root.querySelector("#an-r"), box = root.querySelector("#an-svg"), out = root.querySelector("#an-out"), vv = root.querySelector("#an-v");
+   const draw = () => { const a=+r.value, cx=170, cy=110, L=150; vv.textContent=a;
+     const l1a=P(cx,cy,L,0), l1b=P(cx,cy,L,180), l2a=P(cx,cy,L*0.8,a), l2b=P(cx,cy,L*0.8,a+180);
+     const ang = [[0,a,"1",a,"sa",30],[a,180,"2",180-a,"sb",42],[180,180+a,"3",a,"sa",30],[180+a,360,"4",180-a,"sb",42]];
+     let g=`<line x1="${l1a[0]}" y1="${l1a[1]}" x2="${l1b[0]}" y2="${l1b[1]}" class="s"/><line x1="${l2a[0].toFixed(1)}" y1="${l2a[1].toFixed(1)}" x2="${l2b[0].toFixed(1)}" y2="${l2b[1].toFixed(1)}" class="s"/>`;
+     ang.forEach(([a0,a1,lab,val,cls,rr])=>{ const mid=(a0+a1)/2, [lx,ly]=P(cx,cy,rr+26,mid);
+       g+=`<path d="${arc(cx,cy,rr,a0,a1)}" class="${cls}"/><text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--${cls==="sa"?"accent":"accent2"})">∠${lab}=${val}°</text>`; });
+     g+=`<circle cx="${cx}" cy="${cy}" r="4" class="fi"/>`;
+     box.innerHTML = `<svg viewBox="0 0 340 220" width="340" role="img" aria-label="Дві прямі, що перетинаються, і чотири кути">${g}</svg>`;
+     out.innerHTML = `∠1 + ∠2 = ${a}° + ${180-a}° = <span class="big">180°</span> · ∠1 = ∠3 = ${a}°`; };
+   r.oninput = draw; draw();
+ },
+ diffusion(root){
+   const c = root.querySelector("#df-c"), ctx = c.getContext("2d"), tR = root.querySelector("#df-t"), pOut = root.querySelector("#df-p");
+   const cs = getComputedStyle(document.documentElement); const colA = cs.getPropertyValue("--accent").trim(), colB = cs.getPropertyValue("--accent2").trim(), colL = cs.getPropertyValue("--muted").trim();
+   let W=0, H=220, wall=true, parts=[], raf=0, alive=true;
+   const reset = () => { W = c.clientWidth || 600; c.width = W*devicePixelRatio; c.height = H*devicePixelRatio; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+     wall=true; parts=[]; for(let i=0;i<220;i++){ const left = i<110; parts.push({x: left? 6+Math.random()*(W/2-12) : W/2+6+Math.random()*(W/2-12), y:6+Math.random()*(H-12), a:Math.random()*Math.PI*2, k:left?0:1}); } };
+   const step = () => { const T=+tR.value, sp = 0.35*Math.sqrt(T)*1.6;
+     for(const p of parts){ p.a += (Math.random()-.5)*0.9; p.x += Math.cos(p.a)*sp; p.y += Math.sin(p.a)*sp;
+       if(p.y<5){p.y=5; p.a=-p.a;} if(p.y>H-5){p.y=H-5; p.a=-p.a;} if(p.x<5){p.x=5; p.a=Math.PI-p.a;} if(p.x>W-5){p.x=W-5; p.a=Math.PI-p.a;}
+       if(wall){ if(p.k===0 && p.x>W/2-4){p.x=W/2-4; p.a=Math.PI-p.a;} if(p.k===1 && p.x<W/2+4){p.x=W/2+4; p.a=Math.PI-p.a;} } }
+     ctx.clearRect(0,0,W,H);
+     if(wall){ ctx.fillStyle=colL; ctx.fillRect(W/2-1.5,0,3,H); }
+     for(const p of parts){ ctx.fillStyle = p.k? colB : colA; ctx.beginPath(); ctx.arc(p.x,p.y,3.6,0,Math.PI*2); ctx.fill(); }
+     const crossed = parts.filter(p => (p.k===0 && p.x>W/2) || (p.k===1 && p.x<W/2)).length; pOut.textContent = Math.min(100, Math.round(crossed/parts.length*200));
+     if(alive) raf = requestAnimationFrame(step); };
+   root.querySelector("#df-go").onclick = () => { wall=false; };
+   root.querySelector("#df-reset").onclick = () => reset();
+   reset(); step();
+   stopAnim = () => { alive=false; cancelAnimationFrame(raf); };
+ }
+};
+
+/* =========================================================
+   РЕНДЕР
+   ========================================================= */
+const main = document.getElementById("main"), nav = document.getElementById("nav");
+let view = "home", sel = {};
+
+function go(v){ view = v; if(stopAnim){ stopAnim(); stopAnim=null; }
+  document.documentElement.dataset.s = v === "home" ? "" : v;
+  try{ history.replaceState(null,"", v==="home" ? location.pathname : "#"+v); }catch(e){}
+  renderNav(); v==="home" ? renderHome() : renderSubject(v); window.scrollTo(0,0); }
+
+function renderNav(){
+  nav.innerHTML = [["home","Головна"],...ORDER.map(s=>[s,S[s].short])].map(([k,l])=>`<button type="button" data-v="${k}" ${view===k?'aria-current="page"':''}>${l}</button>`).join("");
+  nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v));
+}
+
+function renderHome(){
+  const t = todayISO();
+  const up = ORDER.flatMap(s => hwAll(s).filter(h=>!h.done).map(h=>({...h, s}))).sort((a,b)=>(a.due||"9").localeCompare(b.due||"9"));
+  main.innerHTML = `
+  <section class="hero"><div><h1>Що зараз <em>вчимо</em> і що задали</h1>
+    <p>Програма 7 класу НУШ. Для кожного предмета — тема, яку проходять зараз, з поясненнями, прикладами та розв'язками, і всі майбутні теми, щоб зазирнути наперед.</p></div>
+    <div class="today">Сьогодні<b>${fmt(t)}</b></div></section>
+  <div class="cards">${ORDER.map(s=>{ const d=S[s], i=curIdx(s), tp=d.topics[i], n=hwAll(s).filter(h=>!h.done).length;
+    return `<button class="card c-${s}" type="button" data-s="${s}"><span class="k">${d.sub}</span><span class="nm">${d.name}</span>
+     <span class="cur"><small>Зараз · тема ${i+1} з ${d.topics.length}</small>${tp.t}</span>
+     <span class="prog"><span style="width:${((i+1)/d.topics.length*100).toFixed(0)}%"></span></span>
+     <span class="hwc">${n? `Домашка: ${n} ${n===1?"завдання":"завдань"}` : "Домашки немає"}</span></button>`; }).join("")}</div>
+  <div class="home2">
+    <section class="panel"><h3>Найближча домашка</h3>
+      ${up.length ? `<div class="up">${up.slice(0,8).map(h=>`<div class="upi" data-s="${h.s}"><div class="d">${fmtShort(h.due)}<small>${h.due?dueLabel(h.due):""}</small></div><div><div class="s">${S[h.s].name}</div><div>${esc(h.text)}</div></div></div>`).join("")}</div>`
+        : `<div class="empty">Поки порожньо. Відкрий предмет і запиши завдання в журнал праворуч від теми: дата видачі, на коли здати, що задали.</div>`}
+    </section>
+    <section class="panel how"><h3>Як користуватися</h3>
+      <p><b>Смуга тем</b> зверху предмета — весь рік. Зелені пройдено, обведена — поточна. Тисни на будь-яку, щоб подивитися наперед.</p>
+      <p><b>Розв'язки</b> сховані: спершу спробуй сам, потім відкрий «Показати розв'язок» і звір кожен крок.</p>
+      <p><b>Поточну тему</b> можна змінити кнопкою внизу теми, якщо в класі йдуть в іншому порядку.</p>
+      <p class="note">Домашка зберігається в цьому браузері. Щоб перенести на інший пристрій, скопіюй резервну копію і встав її там.</p>
+      <div class="backup"><div class="row"><button class="btn small ghost" id="bk-copy" type="button">Скопіювати резервну копію</button><span class="note" id="bk-msg"></span></div>
+        <textarea id="bk-in" placeholder="Встав сюди скопійовану копію з іншого пристрою" aria-label="Резервна копія"></textarea>
+        <div class="row"><button class="btn small ghost" id="bk-load" type="button">Відновити з копії</button></div></div>
+    </section></div>
+  <p class="disc">Порядок тем відповідає типовому календарному плану; у твоєму підручнику він може трохи відрізнятися. Пояснення не замінюють підручник і вчителя, але допомагають розібратися, що й навіщо.</p>`;
+  main.querySelectorAll(".card,.upi").forEach(b=>b.onclick=()=>go(b.dataset.s));
+  const msg = main.querySelector("#bk-msg");
+  main.querySelector("#bk-copy").onclick = () => { const data = {}; ORDER.forEach(s=>{ data["hw."+s]=hwAll(s); data["cur."+s]=store.get("cur."+s,null); });
+    const txt = JSON.stringify(data); const ta = main.querySelector("#bk-in");
+    navigator.clipboard?.writeText(txt).then(()=>{ msg.textContent="Скопійовано"; }).catch(()=>{ ta.value=txt; ta.select(); msg.textContent="Виділено в полі нижче, скопіюй вручну"; }) ?? (ta.value=txt, ta.select()); };
+  main.querySelector("#bk-load").onclick = () => { try{ const d = JSON.parse(main.querySelector("#bk-in").value); Object.keys(d).forEach(k=>{ if(/^(hw|cur)\.(algebra|geometry|physics|history)$/.test(k)) store.set(k, d[k]); }); renderHome(); }catch(e){ msg.textContent="Не вдалося прочитати копію: перевір, що вставлено весь текст"; } };
+}
+
+function renderSubject(s){
+  const d = S[s], ci = curIdx(s); if(sel[s]===undefined) sel[s] = ci; const ti = sel[s], tp = d.topics[ti];
+  const status = i => i<ci ? "done" : i===ci ? "now" : "next";
+  const stLabel = {done:"пройдено", now:"зараз", next:"попереду"};
+  main.innerHTML = `
+   <div class="shead"><div><h1>${d.name}</h1><div class="sub">${d.sub} · 7 клас</div></div>
+     <div class="curpill">Зараз: <b>${d.topics[ci].t}</b></div></div>
+   <div class="road" id="road">${d.topics.map((t,i)=>`<button type="button" class="${status(i)}" data-i="${i}" aria-pressed="${i===ti}"><span class="mo"><span>${t.m}</span><span class="st">${i<ci?"✓":i===ci?"● зараз":""}</span></span><span class="nm">${i+1}. ${t.t}</span></button>`).join("")}</div>
+   <div class="grid">
+     <article class="sheet" id="sheet">
+       <div class="t-eyebrow"><span>Тема ${ti+1} · ${tp.m}</span><span class="badge ${status(ti)}">${stLabel[status(ti)]}</span></div>
+       <h2>${tp.t}</h2>
+       <p class="hook">${tp.hook}</p>
+       <h3>Теорія</h3><div class="theory">${tp.theory}</div>
+       ${tp.visual ? `<h3>${["power","angles","diffusion"].includes(tp.visual)?"Спробуй сам":"Наочно"}</h3><div class="visual" id="vis">${V[tp.visual]()}</div>` : ""}
+       ${tp.ex.length ? `<h3>${s==="history"?"Розбираємо питання":"Приклади з розв'язками"}</h3>${tp.ex.map((e,k)=>`<div class="ex"><div class="q"><span class="n">${pad(k+1)}</span><div>${e.q}</div></div>
+          <details><summary>Показати розв'язок</summary><ol class="steps">${e.s.map(([a,w])=>`<li><div>${a}${w?`<span class="why">${w}</span>`:""}</div></li>`).join("")}</ol><div class="ans">${e.a}</div></details></div>`).join("")}` : ""}
+       ${tp.quiz.length ? `<h3>Перевір себе</h3><div class="quiz">${tp.quiz.map(([q,a])=>`<div class="qq"><span>${q}</span><button type="button">Відповідь</button><span class="qa" hidden>${a}</span></div>`).join("")}</div>` : ""}
+       ${tp.fact ? `<div class="fact"><b>Цікаво</b>${tp.fact}</div>` : ""}
+       ${ti>ci && !tp.ex.length ? `<div class="fact"><b>Попереду</b>Детальні пояснення і задачі до цієї теми додамо, коли до неї дійдете.</div>` : ""}
+       <div class="setcur">${ti===ci ? "Це поточна тема." : `<button class="btn small ghost" id="mk" type="button">Зробити поточною</button><span>якщо в класі вже проходите цю тему</span>`}</div>
+     </article>
+     <aside class="hw" id="hw"></aside>
+   </div>`;
+  main.querySelectorAll("#road button").forEach(b=>b.onclick=()=>{ sel[s]=+b.dataset.i; if(stopAnim){stopAnim();stopAnim=null;} renderSubject(s); document.getElementById("sheet").scrollIntoView({block:"start", behavior:"smooth"}); });
+  const nowBtn = main.querySelector("#road .now"); if(nowBtn && ti===ci) nowBtn.scrollIntoView({inline:"center", block:"nearest"});
+  main.querySelectorAll(".qq button").forEach(b=>b.onclick=()=>{ b.nextElementSibling.hidden=false; b.remove(); });
+  const mk = main.querySelector("#mk"); if(mk) mk.onclick = () => { store.set("cur."+s, ti); renderSubject(s); };
+  if(tp.visual && W8[tp.visual]) W8[tp.visual](main.querySelector("#vis"));
+  renderHW(s);
+}
+
+function renderHW(s){
+  const box = document.getElementById("hw"), d = S[s], ci = curIdx(s), list = hwAll(s);
+  const t = todayISO(), def = addDays(t, 1);
+  const sorted = [...list].sort((a,b)=> (a.done-b.done) || (a.due||"9").localeCompare(b.due||"9"));
+  box.innerHTML = `<h4>Домашка <small>${list.filter(h=>!h.done).length} активних</small></h4>
+   <form class="hwf" id="hwf">
+     <label>Задано<input type="date" id="hw-given-${s}" value="${t}" required></label>
+     <label>Здати до<input type="date" id="hw-due-${s}" value="${def}"></label>
+     <label class="full">Тема<select id="hw-topic-${s}">${d.topics.map((x,i)=>`<option value="${i}" ${i===ci?"selected":""}>${i+1}. ${x.t}</option>`).join("")}</select></label>
+     <label class="full">Що задали<textarea id="hw-text-${s}" placeholder="Напр.: § 5, № 112, 115, 118 (а, б)" required></textarea></label>
+     <button class="btn full" type="submit">Записати</button>
+   </form>
+   <div class="hwlist">${sorted.length ? sorted.map(h=>`<div class="hwi ${h.done?"done":""}" data-id="${h.id}">
+      <input type="checkbox" ${h.done?"checked":""} aria-label="Виконано">
+      <div><div class="meta"><span>задано ${fmtShort(h.given)}</span>${h.due?`<span class="due ${h.done||daysTo(h.due)>2?"ok":""}">до ${fmtShort(h.due)} · ${h.done?"зроблено":dueLabel(h.due)}</span>`:""}</div>
+      <div class="txt">${esc(h.text)}</div>${d.topics[h.topic]?`<div class="tp">${d.topics[h.topic].t}</div>`:""}</div>
+      <button class="del" type="button" aria-label="Видалити">✕</button></div>`).join("")
+     : `<div class="empty">Ще нічого не записано. Додай перше завдання: дати вже підставлено на сьогодні й завтра.</div>`}</div>`;
+  box.querySelector("#hwf").onsubmit = e => { e.preventDefault();
+    const text = box.querySelector(`#hw-text-${s}`).value.trim(); if(!text) return;
+    const item = {id:Date.now().toString(36), given:box.querySelector(`#hw-given-${s}`).value, due:box.querySelector(`#hw-due-${s}`).value, topic:+box.querySelector(`#hw-topic-${s}`).value, text, done:false};
+    store.set("hw."+s, [...hwAll(s), item]); renderHW(s); };
+  box.querySelectorAll(".hwi").forEach(el=>{ const id = el.dataset.id;
+    el.querySelector("input").onchange = e => { store.set("hw."+s, hwAll(s).map(h=>h.id===id?{...h,done:e.target.checked}:h)); renderHW(s); };
+    const del = el.querySelector(".del"); del.onclick = () => { if(!del.classList.contains("arm")){ del.classList.add("arm"); del.textContent="Видалити?"; setTimeout(()=>{ if(del.isConnected){ del.classList.remove("arm"); del.textContent="✕"; } },3000); return; }
+      store.set("hw."+s, hwAll(s).filter(h=>h.id!==id)); renderHW(s); };
+  });
+}
+
+document.getElementById("brand").onclick = () => go("home");
+const start = (location.hash||"").slice(1);
+go(ORDER.includes(start) ? start : "home");
+</script>
+
+</body>
+</html>
