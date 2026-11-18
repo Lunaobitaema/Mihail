@@ -266,7 +266,40 @@ canvas{display:block; width:100%; border-radius:6px}
 .backup .row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
 .note{font-size:13px; color:var(--muted)}
 .disc{font-size:13px; color:var(--muted); margin-top:26px; max-width:80ch}
-@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+/* ---------- помічник Claude ---------- */
+.askbtn{border:1px solid var(--accent); color:var(--accent); background:none; border-radius:999px; padding:2px 10px; font-family:var(--f-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer}
+.ai{border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line)); border-radius:12px; background:var(--bg); padding:14px; display:flex; flex-direction:column; gap:12px; scroll-margin-top:80px}
+.ai-intro{font-size:14.5px; color:var(--muted); margin:0; max-width:64ch}
+.ai-chips{display:flex; flex-wrap:wrap; gap:6px}
+.ai-chips button{border:1px solid var(--line); color:var(--ink); background:var(--surface); border-radius:999px; padding:5px 12px; font-size:13.5px; cursor:pointer}
+.ai-chips button:hover{border-color:var(--accent); color:var(--accent)}
+.ai-log{display:flex; flex-direction:column; gap:10px}
+.msg{border-radius:10px; padding:10px 13px; min-width:0; overflow-wrap:anywhere; font-size:15.5px; line-height:1.55}
+.msg .who{display:block; font-family:var(--f-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:4px}
+.msg.me{align-self:flex-end; max-width:88%; background:var(--soft); border:1px solid var(--line); white-space:pre-wrap}
+.msg.bot{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent)}
+.msg.bot p{margin:.45em 0}
+.msg.bot ul,.msg.bot ol{margin:.4em 0; padding-left:1.4em}
+.msg.bot li{margin:.25em 0}
+.msg.bot .mh{font-weight:700; color:var(--accent); margin:.7em 0 .2em}
+.msg.bot code{font-family:var(--f-mono); font-size:.92em; background:var(--soft); padding:0 4px; border-radius:4px}
+.msg.err{border-left-color:var(--accent2)}
+.msg .note{display:block; margin-top:6px}
+.dots::after{content:"…"; animation:dots 1.2s steps(4,end) infinite; display:inline-block; overflow:hidden; vertical-align:bottom; width:0}
+@keyframes dots{to{width:1.2em}}
+.ai-form{display:flex; flex-direction:column; gap:8px}
+.ai-form textarea{width:100%; min-height:84px; resize:vertical; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px; padding:9px 10px; font-family:var(--f-body); font-size:15px}
+.ai-row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.ai-row .sp{flex:1}
+.ai-photo{display:inline-flex; align-items:center; gap:6px; border:1px dashed var(--line); border-radius:8px; padding:5px 10px; font-size:13.5px; cursor:pointer; color:var(--muted)}
+.ai-photo input{position:absolute; width:1px; height:1px; opacity:0}
+.ai-photo:focus-within{outline:2px solid var(--accent); outline-offset:2px}
+.ai-att{display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--ink); background:var(--soft); border-radius:8px; padding:4px 8px}
+.ai-att img{width:34px; height:34px; object-fit:cover; border-radius:4px}
+.ai-att button{border:0; background:none; cursor:pointer; color:var(--muted)}
+.linkbtn{border:0; background:none; color:var(--muted); text-decoration:underline; cursor:pointer; font-size:13px; padding:0}
+.hwai{border:0; background:none; color:var(--accent); cursor:pointer; font-size:12.5px; padding:2px 0; font-weight:600; justify-self:start}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} .dots::after{animation:none; width:1.2em} }
 </style>
 </head>
 <body>
@@ -891,6 +924,7 @@ function renderHome(){
     <section class="panel how"><h3>Як користуватися</h3>
       <p><b>Смуга тем</b> зверху предмета — весь рік. Зелені пройдено, обведена — поточна. Тисни на будь-яку, щоб подивитися наперед.</p>
       <p><b>Розв'язки</b> сховані: спершу спробуй сам, потім відкрий «Показати розв'язок» і звір кожен крок.</p>
+      <p><b>Запитай Claude</b> — внизу кожної теми: підказка, розбір завдання крок за кроком, задача на тренування, перевірка свого рішення. Можна додати фото завдання. У журналі домашки є кнопка «Розібрати з Claude».</p>
       <p><b>Поточну тему</b> можна змінити кнопкою внизу теми, якщо в класі йдуть в іншому порядку.</p>
       <p class="note">Домашка зберігається в цьому браузері. Щоб перенести на інший пристрій, скопіюй резервну копію і встав її там.</p>
       <div class="backup"><div class="row"><button class="btn small ghost" id="bk-copy" type="button">Скопіювати резервну копію</button><span class="note" id="bk-msg"></span></div>
@@ -916,7 +950,7 @@ function renderSubject(s){
    <div class="road" id="road">${d.topics.map((t,i)=>`<button type="button" class="${status(i)}" data-i="${i}" aria-pressed="${i===ti}"><span class="mo"><span>${t.m}</span><span class="st">${i<ci?"✓":i===ci?"● зараз":""}</span></span><span class="nm">${i+1}. ${t.t}</span></button>`).join("")}</div>
    <div class="grid">
      <article class="sheet" id="sheet">
-       <div class="t-eyebrow"><span>Тема ${ti+1} · ${tp.m}</span><span class="badge ${status(ti)}">${stLabel[status(ti)]}</span></div>
+       <div class="t-eyebrow"><span>Тема ${ti+1} · ${tp.m}</span><span class="badge ${status(ti)}">${stLabel[status(ti)]}</span><button class="askbtn" id="askjump" type="button">Запитати Claude ↓</button></div>
        <h2>${tp.t}</h2>
        <p class="hook">${tp.hook}</p>
        <h3>Теорія</h3><div class="theory">${tp.theory}</div>
@@ -925,7 +959,8 @@ function renderSubject(s){
           <details><summary>Показати розв'язок</summary><ol class="steps">${e.s.map(([a,w])=>`<li><div>${a}${w?`<span class="why">${w}</span>`:""}</div></li>`).join("")}</ol><div class="ans">${e.a}</div></details></div>`).join("")}` : ""}
        ${tp.quiz.length ? `<h3>Перевір себе</h3><div class="quiz">${tp.quiz.map(([q,a])=>`<div class="qq"><span>${q}</span><button type="button">Відповідь</button><span class="qa" hidden>${a}</span></div>`).join("")}</div>` : ""}
        ${tp.fact ? `<div class="fact"><b>Цікаво</b>${tp.fact}</div>` : ""}
-       ${ti>ci && !tp.ex.length ? `<div class="fact"><b>Попереду</b>Детальні пояснення і задачі до цієї теми додамо, коли до неї дійдете.</div>` : ""}
+       ${ti>ci && !tp.ex.length ? `<div class="fact"><b>Попереду</b>Детальні пояснення і задачі до цієї теми додамо, коли до неї дійдете. А поки можна запитати Claude.</div>` : ""}
+       <h3>Запитай Claude</h3><section class="ai" id="ai" aria-label="Помічник Claude"></section>
        <div class="setcur">${ti===ci ? "Це поточна тема." : `<button class="btn small ghost" id="mk" type="button">Зробити поточною</button><span>якщо в класі вже проходите цю тему</span>`}</div>
      </article>
      <aside class="hw" id="hw"></aside>
@@ -935,7 +970,175 @@ function renderSubject(s){
   main.querySelectorAll(".qq button").forEach(b=>b.onclick=()=>{ b.nextElementSibling.hidden=false; b.remove(); });
   const mk = main.querySelector("#mk"); if(mk) mk.onclick = () => { store.set("cur."+s, ti); renderSubject(s); };
   if(tp.visual && W8[tp.visual]) W8[tp.visual](main.querySelector("#vis"));
+  main.querySelector("#askjump").onclick = () => { const a = document.getElementById("ai"); a.scrollIntoView({block:"start", behavior:"smooth"}); a.querySelector("textarea")?.focus({preventScroll:true}); };
+  renderAI(s, ti);
   renderHW(s);
+}
+
+/* =========================================================
+   ПОМІЧНИК CLAUDE (працює у версії сайту на claude.ai)
+   ========================================================= */
+const ARTIFACT_URL = "https://claude.ai/artifact/BEw8ghv8GVwcNMUwAbVyuY";
+let SAMPLE, IMG_TYPES = null, AI_OFF = "";        // SAMPLE: undefined = ще підключаємо, null = недоступно
+const AI_IMG = {}, AI_DRAFT = {};
+let aiBusy = null;                                 // {key, ctl, bubble}
+(window.claude?.use ? window.claude.use("sample") : Promise.resolve(null))
+  .then(async f => { SAMPLE = f || null; if(f){ const l = await f.limits().catch(()=>null); IMG_TYPES = l?.images ? l.images.mediaTypes : null; } })
+  .catch(() => { SAMPLE = null; })
+  .finally(() => { const a = document.getElementById("ai"); if(a) renderAI(a.dataset.s, +a.dataset.ti); });
+
+const aiKey = (s, ti) => `${s}:${S[s].topics[ti].id}`;
+const aiTurns = key => store.get("ai."+key, []);
+const plain = html => { const d = document.createElement("div"); d.innerHTML = html; return d.textContent.replace(/\s+\n/g,"\n").replace(/[ \t]+/g," ").trim(); };
+
+function md(src){
+  const inline = t => t.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`([^`\n]+)`/g,"<code>$1</code>").replace(/(^|[^*\w])\*([^*\n]+)\*(?!\w)/g,"$1<i>$2</i>");
+  const out = []; let list = null, para = [];
+  const flushP = () => { if(para.length){ out.push(`<p>${para.map(inline).join("<br>")}</p>`); para = []; } };
+  const flushL = () => { if(list){ out.push(`<${list.t}${list.start>1?` start="${list.start}"`:""}>${list.items.map(i=>`<li>${inline(i)}</li>`).join("")}</${list.t}>`); list = null; } };
+  for(const raw of esc(src).split("\n")){
+    const line = raw.trimEnd(); let m;
+    if(!line.trim()){ flushP(); flushL(); continue; }
+    if((m = line.match(/^#{1,4}\s+(.*)/))){ flushP(); flushL(); out.push(`<p class="mh">${inline(m[1])}</p>`); continue; }
+    if((m = line.match(/^\s*[-*•]\s+(.*)/))){ flushP(); if(!list || list.t!=="ul"){ flushL(); list = {t:"ul", items:[]}; } list.items.push(m[1]); continue; }
+    if((m = line.match(/^\s*(\d+)[.)]\s+(.*)/))){ flushP(); if(!list || list.t!=="ol"){ flushL(); list = {t:"ol", start:+m[1], items:[]}; } list.items.push(m[2]); continue; }
+    if(list && /^\s{2,}\S/.test(raw)){ list.items[list.items.length-1] += "<br>" + line.trim(); continue; }
+    flushL(); para.push(line);
+  }
+  flushP(); flushL(); return out.join("");
+}
+
+function aiRules(s, ti){
+  const d = S[s], tp = d.topics[ti];
+  const exs = tp.ex.map((e,i)=>`${i+1}) ${plain(e.q)} → ${plain(e.a)}`).join("\n");
+  const hw = hwAll(s).filter(h=>!h.done).map(h=>`- ${h.text}${h.due?` (здати до ${fmtShort(h.due)})`:""}`).join("\n");
+  return `Ти — терплячий репетитор для учня 7 класу української школи (програма НУШ). Учень відкрив сайт-підручник і пише тобі.
+Предмет: ${d.name}. Тема на сторінці: «${tp.t}» (${tp.m}).
+
+Конспект теми з сайту:
+${plain(tp.theory).slice(0,3500)}
+${exs ? `\nПриклади, розібрані на сайті:\n${exs}` : ""}
+${hw ? `\nАктивна домашка з цього предмета:\n${hw}` : ""}
+
+Як відповідати:
+- Мовою, якою написано питання (українською або російською). Терміни — українською, як у підручнику; якщо пишеш російською, давай український термін у дужках.
+- Просто і по-людськи, як для 13-річного: короткі речення, приклад із життя (спорт, самокат, гроші, час, телефон), без «води».
+- Повідомлення починаються з позначки режиму:
+  [Підказка] — НЕ давай готової відповіді. Скажи, з чого почати і яке правило знадобиться, зроби лише перший крок і запитай учня, що він отримав далі.
+  [Розв'язок] — розв'яжи крок за кроком, нумеровано; після кожного кроку одним реченням поясни «чому так». Наприкінці окремий рядок «Відповідь: …» і одна схожа задача для самоперевірки (без відповіді).
+  [Пояснення] — поясни тему простіше, з прикладом і, якщо доречно, маленькою схемою текстом.
+  [Тренування] — дай одну задачу середньої складності, як у шкільному підручнику, без відповіді. Коли учень надішле відповідь — перевір.
+  [Перевірка] — перевір рішення учня: що правильно, на якому саме кроці помилка і чому, як виправити. Не переписуй усе за нього.
+- Математику й фізику пиши звичайним текстом з Unicode: x², a³, √, ·, :, ∠, °, ≠, ≤, ⊥, ½. Без LaTeX і без знаків $. Одиниці вимірювання — завжди.
+- Формат: короткі абзаци, нумеровані кроки, **жирним** — головне. Без таблиць і заголовків вище третього рівня. Зазвичай до 250 слів.
+- Якщо умова незрозуміла або фото нечітке — перепитай, що саме написано, не вигадуй умову.
+- Якщо питання не про навчання — м'яко поверни до уроків.
+- Перевіряй обчислення двічі: учень довіряє тобі.`;
+}
+
+function renderAI(s, ti){
+  const box = document.getElementById("ai"); if(!box) return;
+  box.dataset.s = s; box.dataset.ti = ti;
+  const key = aiKey(s, ti), turns = aiTurns(key);
+  if(SAMPLE === null || AI_OFF){
+    box.innerHTML = `<p class="ai-intro">${AI_OFF || `Помічник Claude працює, коли сайт відкрито в Claude (claude.ai) під своїм акаунтом. Там можна написати питання або сфотографувати завдання — і отримати підказку чи розбір крок за кроком. Усі інші матеріали тут працюють як звичайно.`}</p>
+      ${AI_OFF ? "" : `<div class="ai-row"><a class="btn small ghost" href="${ARTIFACT_URL}" target="_blank" rel="noopener">Відкрити версію з помічником</a></div>`}`;
+    return;
+  }
+  const img = AI_IMG[key];
+  box.innerHTML = `
+    <p class="ai-intro">Напиши, що незрозуміло, або перепиши чи сфотографуй завдання. Обери <b>«Підказка»</b>, щоб дійти до відповіді самому, або <b>«Розв'язок»</b> — щоб побачити розбір із поясненнями.</p>
+    <div class="ai-chips">
+      <button type="button" data-q="explain">Поясни тему простіше</button>
+      <button type="button" data-q="train">Дай задачу на тренування</button>
+      <button type="button" data-q="check">Перевір моє рішення</button>
+    </div>
+    <div class="ai-log" id="ai-log" aria-live="polite">${turns.map(t=> t.role==="user"
+       ? `<div class="msg me"><span class="who">Ти</span>${esc(t.show||t.content)}</div>`
+       : `<div class="msg bot"><span class="who">Claude</span>${md(t.content)}</div>`).join("")}</div>
+    <form class="ai-form" id="ai-form">
+      <textarea id="ai-q-${key.replace(":","-")}" placeholder="Напр.: не розумію, чому (−2)⁴ додатне; або: № 245 — знайти суміжні кути, якщо один на 40° більший" aria-label="Твоє питання">${esc(AI_DRAFT[key]||"")}</textarea>
+      <div class="ai-row">
+        ${IMG_TYPES ? (img ? `<span class="ai-att"><img alt="" src="${img.url}">фото завдання<button type="button" id="ai-unimg" aria-label="Прибрати фото">✕</button></span>`
+                          : `<label class="ai-photo">📷 Додати фото<input type="file" id="ai-file" accept="${IMG_TYPES.join(",")}"></label>`) : ""}
+        <span class="sp"></span>
+        ${turns.length ? `<button class="linkbtn" type="button" id="ai-clear">Нова розмова</button>` : ""}
+        <button class="btn ghost" type="button" data-mode="Підказка">Підказка</button>
+        <button class="btn" type="submit" data-mode="Розв'язок">Розв'язок</button>
+      </div>
+    </form>
+    ${SAMPLE === undefined ? `<p class="note">Підключаю помічника…</p>` : `<p class="note">Перше питання попросить дозволу використати Claude — натисни «Дозволити». Розмова з цієї теми зберігається в цьому браузері.</p>`}`;
+
+  const ta = box.querySelector("textarea"), log = box.querySelector("#ai-log");
+  ta.oninput = () => { AI_DRAFT[key] = ta.value; };
+  const send = (mode, text, show) => askClaude(s, ti, mode, text, show);
+  box.querySelectorAll("[data-mode]").forEach(b => b.onclick = e => { e.preventDefault();
+    const q = ta.value.trim(); if(!q && !AI_IMG[key]){ ta.focus(); return; }
+    send(b.dataset.mode, q || "Ось фото завдання. Допоможи з ним.", q || "📷 фото завдання"); });
+  box.querySelector("#ai-form").onsubmit = e => e.preventDefault();
+  box.querySelectorAll(".ai-chips button").forEach(b => b.onclick = () => {
+    if(b.dataset.q==="explain") send("Пояснення", `Поясни тему «${S[s].topics[ti].t}» простіше, з прикладом.`, "Поясни тему простіше");
+    if(b.dataset.q==="train") send("Тренування", "Дай мені одну задачу на цю тему. Я спробую розв'язати сам.", "Дай задачу на тренування");
+    if(b.dataset.q==="check"){ if(!ta.value.trim()) ta.value = "Перевір моє рішення:\nЗавдання: \nМоє рішення: "; AI_DRAFT[key] = ta.value; ta.focus();
+      box.querySelector('[data-mode="Розв\'язок"]').dataset.mode = "Перевірка"; } });
+  const file = box.querySelector("#ai-file");
+  if(file) file.onchange = () => { const f = file.files[0]; if(!f) return; AI_IMG[key] = {file:f, url:URL.createObjectURL(f)}; AI_DRAFT[key] = ta.value; renderAI(s, ti); };
+  const un = box.querySelector("#ai-unimg"); if(un) un.onclick = () => { URL.revokeObjectURL(AI_IMG[key].url); delete AI_IMG[key]; AI_DRAFT[key] = ta.value; renderAI(s, ti); };
+  const cl = box.querySelector("#ai-clear"); if(cl) cl.onclick = () => { if(aiBusy?.key===key) aiBusy.ctl.abort(); store.set("ai."+key, []); renderAI(s, ti); };
+  if(SAMPLE === undefined) box.querySelectorAll("button").forEach(b => b.disabled = true);
+  if(aiBusy?.key === key){ // відповідь ще пишеться
+    log.append(aiBusy.bubble); box.querySelectorAll("[data-mode]").forEach(b=>b.disabled=true);
+  }
+}
+
+async function askClaude(s, ti, mode, text, show){
+  if(!SAMPLE || aiBusy) return;
+  const key = aiKey(s, ti), img = AI_IMG[key];
+  const content = `[${mode}] ${text}${img ? "\n\n(До повідомлення додано фото: завдання або сторінка зошита/підручника.)" : ""}`;
+  const turns = [...aiTurns(key), {role:"user", content, show}];
+  store.set("ai."+key, turns); AI_DRAFT[key] = "";
+  const ctl = new AbortController();
+  const bubble = document.createElement("div"); bubble.className = "msg bot";
+  bubble.innerHTML = `<span class="who">Claude</span><span class="dots">Думаю</span> <button class="linkbtn" type="button">Стоп</button>`;
+  bubble.querySelector("button").onclick = () => ctl.abort();
+  aiBusy = {key, ctl, bubble};
+  renderAI(s, ti);
+  bubble.scrollIntoView({block:"nearest", behavior:"smooth"});
+  const finish = (answer, note) => {
+    aiBusy = null;
+    if(answer) store.set("ai."+key, [...aiTurns(key), {role:"assistant", content: answer + (note ? `\n\n(${note})` : "")}].slice(-16));
+    const a = document.getElementById("ai"); if(a && a.dataset.s===s && +a.dataset.ti===ti) renderAI(s, ti);
+  };
+  try{
+    const history = turns.slice(-12); while(history.length && history[0].role!=="user") history.shift();
+    const input = [{role:"user", content: aiRules(s, ti)}, ...history.map(t=>({role:t.role, content:t.content}))];
+    const opts = { cache:false, signal:ctl.signal, modelTier:"default",
+      onText: ({text}) => { bubble.innerHTML = `<span class="who">Claude</span>${md(text)}<button class="linkbtn" type="button">Стоп</button>`; bubble.querySelector("button").onclick = () => ctl.abort(); } };
+    if(img) opts.images = [img.file];
+    const res = await SAMPLE(input, opts);
+    finish(res.text, res.truncated ? "відповідь обірвалась — попроси продовжити" : "");
+  }catch(e){
+    const code = e?.code || "upstream_error";
+    if(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(code)){
+      AI_OFF = code==="not_granted" ? "Доступ до Claude не дозволено. Онови сторінку і натисни «Дозволити», коли з'явиться запит." : "Помічник Claude зараз недоступний для цього акаунта.";
+      store.set("ai."+key, aiTurns(key).slice(0,-1)); finish(""); return; }
+    if(code==="images_unavailable" || code==="image_rejected"){ delete AI_IMG[key]; }
+    const msg = {cancelled:"зупинено", rate_limited:"забагато запитів — спробуй трохи пізніше", session_expired:"треба знову увійти в Claude",
+      image_rejected:"не вдалося прочитати фото — спробуй інше", images_unavailable:"фото тут надіслати не можна — перепиши умову текстом",
+      refused:"на це питання Claude не відповість — переформулюй", prompt_too_large:"розмова задовга — натисни «Нова розмова»"}[code] || "зв'язок перервався — спробуй ще раз";
+    if(e?.text && code!=="refused") finish(e.text, msg);
+    else { store.set("ai."+key, aiTurns(key).slice(0,-1)); AI_DRAFT[key] = ["Підказка","Розв'язок","Перевірка"].includes(mode) ? text : ""; finish("");
+      const log = document.getElementById("ai-log"); if(log && code!=="cancelled"){ const m = document.createElement("div"); m.className="msg bot err"; m.innerHTML = `<span class="who">Claude</span>Не вийшло: ${msg}.`; log.append(m); } }
+  }
+}
+
+function askAboutHW(s, h){
+  const ti = S[s].topics[h.topic] ? h.topic : curIdx(s);
+  sel[s] = ti; renderSubject(s);
+  AI_DRAFT[aiKey(s, ti)] = `Домашнє завдання: ${h.text}\n`;
+  renderAI(s, ti);
+  const a = document.getElementById("ai"); a.scrollIntoView({block:"start", behavior:"smooth"});
+  const ta = a.querySelector("textarea"); if(ta){ ta.focus({preventScroll:true}); ta.setSelectionRange(ta.value.length, ta.value.length); }
 }
 
 function renderHW(s){
@@ -953,7 +1156,7 @@ function renderHW(s){
    <div class="hwlist">${sorted.length ? sorted.map(h=>`<div class="hwi ${h.done?"done":""}" data-id="${h.id}">
       <input type="checkbox" ${h.done?"checked":""} aria-label="Виконано">
       <div><div class="meta"><span>задано ${fmtShort(h.given)}</span>${h.due?`<span class="due ${h.done||daysTo(h.due)>2?"ok":""}">до ${fmtShort(h.due)} · ${h.done?"зроблено":dueLabel(h.due)}</span>`:""}</div>
-      <div class="txt">${esc(h.text)}</div>${d.topics[h.topic]?`<div class="tp">${d.topics[h.topic].t}</div>`:""}</div>
+      <div class="txt">${esc(h.text)}</div>${d.topics[h.topic]?`<div class="tp">${d.topics[h.topic].t}</div>`:""}${h.done?"":`<button class="hwai" type="button">Розібрати з Claude →</button>`}</div>
       <button class="del" type="button" aria-label="Видалити">✕</button></div>`).join("")
      : `<div class="empty">Ще нічого не записано. Додай перше завдання: дати вже підставлено на сьогодні й завтра.</div>`}</div>`;
   box.querySelector("#hwf").onsubmit = e => { e.preventDefault();
@@ -961,6 +1164,7 @@ function renderHW(s){
     const item = {id:Date.now().toString(36), given:box.querySelector(`#hw-given-${s}`).value, due:box.querySelector(`#hw-due-${s}`).value, topic:+box.querySelector(`#hw-topic-${s}`).value, text, done:false};
     store.set("hw."+s, [...hwAll(s), item]); renderHW(s); };
   box.querySelectorAll(".hwi").forEach(el=>{ const id = el.dataset.id;
+    const ha = el.querySelector(".hwai"); if(ha) ha.onclick = () => askAboutHW(s, hwAll(s).find(h=>h.id===id));
     el.querySelector("input").onchange = e => { store.set("hw."+s, hwAll(s).map(h=>h.id===id?{...h,done:e.target.checked}:h)); renderHW(s); };
     const del = el.querySelector(".del"); del.onclick = () => { if(!del.classList.contains("arm")){ del.classList.add("arm"); del.textContent="Видалити?"; setTimeout(()=>{ if(del.isConnected){ del.classList.remove("arm"); del.textContent="✕"; } },3000); return; }
       store.set("hw."+s, hwAll(s).filter(h=>h.id!==id)); renderHW(s); };
